@@ -21,8 +21,8 @@ public struct PrimaryButtonStyle: ButtonStyle {
     
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .foregroundColor(.white)
-            .font(Font.body.weight(.semibold))
+            .foregroundColor(.white) //TODO:
+            .font(Font.body.weight(.semibold)) //TODO:
             .frame(maxWidth: maxWidth, minHeight: buttonHeight, alignment: .center)
             .background((colorScheme == .light ? lightPrimaryColor : darkPrimaryColor).opacity(configuration.isPressed ? 0.7 : 1))
             .clipShape(RoundedRectangle(cornerRadius: buttonHeight/2))
