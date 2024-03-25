@@ -8,7 +8,7 @@
 import SwiftUI
 
 public extension View {
-     func themeStyle<Style: ViewModifier>(_ style: Style) -> some View {
+     func backgroundStyle<Style: ViewModifier>(_ style: Style) -> some View {
         ModifiedContent(content: self, modifier: style)
     }
 }
