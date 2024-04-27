@@ -26,6 +26,8 @@ public struct SimpleButtonStyle: ButtonStyle {
             .foregroundColor((colorScheme == .light ? lightTextColor : darkTextColor))
             .font(font)
             .frame(maxWidth: maxValue, maxHeight: mediumValue, alignment: .center)
+            .background((colorScheme == .light ? lightPrimaryColor : darkPrimaryColor).opacity(configuration.isPressed ? 0.7 : 1))
+            .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
     }
 }
 
