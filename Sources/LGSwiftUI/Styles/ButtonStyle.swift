@@ -31,6 +31,28 @@ public struct SimpleButtonStyle: ButtonStyle {
     }
 }
 
+public struct ClearButtonStyle: ButtonStyle {
+    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.lightText) var lightTextColor
+    @Environment(\.darkText) var darkTextColor
+    @Environment(\.mediumValue) var mediumValue
+    @Environment(\.body1) var font
+    
+    public init(maxValue: CGFloat) {
+        self.maxValue = maxValue
+    }
+    var maxValue: CGFloat
+    
+    public func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .foregroundColor((colorScheme == .light ? lightTextColor : darkTextColor))
+            .font(font)
+            .frame(maxWidth: maxValue, maxHeight: mediumValue, alignment: .center)
+            .background(Color.clear.opacity(configuration.isPressed ? 0.7 : 1))
+            .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
+    }
+}
+
 
 public struct PrimaryButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
