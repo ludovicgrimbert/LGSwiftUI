@@ -33,6 +33,18 @@ public protocol Theme: Sendable {
     var acceptedStatusColor: Color { get }
     var refusedStatusColor: Color { get }
     
+    //    ************* VALUE *************
+    var smallValue: CGFloat { get }
+    var mediumValue: CGFloat { get }
+    var largeValue: CGFloat { get }
+    var veryLargeValue: CGFloat { get }
+    
+    //    ************* MARGIN *************
+    var smallMargin: CGFloat { get }
+    var mediumMargin: CGFloat { get }
+    var largeMargin: CGFloat { get }
+    var veryLarge: CGFloat { get }
+    
 }
 
 public extension Theme {
@@ -61,6 +73,17 @@ public extension Theme {
     var acceptedStatusColor: Color { Color.green }
     var refusedStatusColor: Color { Color.green }
     
+    //    ************* VALUE *************
+    var smallValue: CGFloat { 24.0 }
+    var mediumValue: CGFloat { 48.0 }
+    var largeValue: CGFloat { 80.0 }
+    var veryLargeValue: CGFloat { 160.0 }
+    
+    //    ************* MARGIN *************
+    var smallMargin: CGFloat { 8.0 }
+    var mediumMargin: CGFloat { 16.0 }
+    var largeMargin: CGFloat { 24.0 }
+    var veryLarge: CGFloat { 32.0 }
 }
 
 enum ThemeKey: EnvironmentKey {
@@ -99,5 +122,17 @@ struct DefaultTheme: Theme {
     var progressStatusColor: Color = .green
     var acceptedStatusColor: Color = .green
     var refusedStatusColor: Color = .green
+    
+    //    ************* VALUE *************
+    var smallValue: CGFloat = 24.0
+    var mediumValue: CGFloat  = 48.0
+    var largeValue: CGFloat  = 80.0
+    var veryLargeValue: CGFloat  = 160.0
+    
+    //    ************* MARGIN *************
+    var smallMargin: CGFloat = 8.0
+    var mediumMargin: CGFloat = 16.0
+    var largeMargin: CGFloat = 24.0
+    var veryLarge: CGFloat = 32.0
 }
 

@@ -1,6 +1,6 @@
 //
 //  SwiftUIView.swift
-//  
+//
 //
 //  Created by Ludovic Grimbert on 21/11/2021.
 //
@@ -10,7 +10,6 @@ import SwiftUI
 public struct SimpleButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.theme) var theme
-    @Environment(\.mediumValue) var mediumValue
     @Environment(\.body1) var font
     
     public init(maxValue: CGFloat) {
@@ -22,7 +21,7 @@ public struct SimpleButtonStyle: ButtonStyle {
         configuration.label
             .foregroundColor((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor))
             .font(font)
-            .frame(maxWidth: maxValue, maxHeight: mediumValue, alignment: .center)
+            .frame(maxWidth: maxValue, maxHeight: theme.mediumValue, alignment: .center)
             .background((colorScheme == .light ? theme.lightPrimaryColor : theme.darkPrimaryColor).opacity(configuration.isPressed ? 0.7 : 1))
             .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
     }
@@ -31,7 +30,6 @@ public struct SimpleButtonStyle: ButtonStyle {
 public struct ClearButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.theme) var theme
-    @Environment(\.mediumValue) var mediumValue
     @Environment(\.body1) var font
     
     public init(maxValue: CGFloat) {
@@ -43,7 +41,7 @@ public struct ClearButtonStyle: ButtonStyle {
         configuration.label
             .foregroundColor((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor))
             .font(font)
-            .frame(maxWidth: maxValue, maxHeight: mediumValue, alignment: .center)
+            .frame(maxWidth: maxValue, maxHeight: theme.mediumValue, alignment: .center)
             .background(Color.clear.opacity(configuration.isPressed ? 0.7 : 1))
             .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
     }
@@ -53,7 +51,6 @@ public struct ClearButtonStyle: ButtonStyle {
 public struct PrimaryButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.theme) var theme
-    @Environment(\.mediumValue) var mediumValue
     @Environment(\.body1) var font
     
     public init(maxValue: CGFloat) {
@@ -65,10 +62,10 @@ public struct PrimaryButtonStyle: ButtonStyle {
         configuration.label
             .foregroundColor((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor))
             .font(font)
-            .frame(maxWidth: maxValue, maxHeight: mediumValue, alignment: .center)
+            .frame(maxWidth: maxValue, maxHeight: theme.mediumValue, alignment: .center)
             .border((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor), width: 0.5)
             .background((colorScheme == .light ? theme.lightPrimaryColor : theme.darkPrimaryColor).opacity(configuration.isPressed ? 0.7 : 1))
-            .clipShape(RoundedRectangle(cornerRadius: mediumValue/2))
+            .clipShape(RoundedRectangle(cornerRadius: theme.mediumValue/2))
             .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
     }
 }
@@ -76,7 +73,6 @@ public struct PrimaryButtonStyle: ButtonStyle {
 public struct RectangleButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.theme) var theme
-    @Environment(\.mediumValue) var mediumValue
     @Environment(\.body1) var font
     
     public init(maxValue: CGFloat) {
@@ -88,7 +84,7 @@ public struct RectangleButtonStyle: ButtonStyle {
         configuration.label
             .foregroundColor((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor))
             .font(font)
-            .frame(maxWidth: maxValue, maxHeight: mediumValue, alignment: .center)
+            .frame(maxWidth: maxValue, maxHeight: theme.mediumValue, alignment: .center)
             .border((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor), width: 0.5)
             .background((colorScheme == .light ? theme.lightPrimaryColor : theme.darkPrimaryColor).opacity(configuration.isPressed ? 0.7 : 1))
             .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
@@ -130,7 +126,7 @@ public struct CircleToggleButtonStyle: ButtonStyle {
     }
     var maxValue: CGFloat
     var isToggle: Bool
-
+    
     
     public func makeBody(configuration: Configuration) -> some View {
         switch (isToggle, colorScheme) {
@@ -257,7 +253,7 @@ public struct CircleStatusButtonStyle: ButtonStyle {
 
 struct PrimaryGradient: View {
     @Environment(\.theme) var theme
-
+    
     var body: some View {
         Capsule()
             .stroke(

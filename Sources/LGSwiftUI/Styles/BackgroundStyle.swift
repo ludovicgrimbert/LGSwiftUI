@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+public extension View {
+    func backgroundStyle<Style: ViewModifier>(_ style: Style) -> some View {
+        ModifiedContent(content: self, modifier: style)
+    }
+}
+
 public struct BackgroundPrimaryStyle: ViewModifier {
     public init() {}
     @Environment(\.theme) var theme

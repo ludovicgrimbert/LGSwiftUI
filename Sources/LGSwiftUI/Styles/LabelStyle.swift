@@ -9,7 +9,7 @@ import SwiftUI
 
 public struct CustomIconLabelStyle: LabelStyle {
     @Environment(\.theme) var theme
-
+    
     
     public init(color: Color, size: CGFloat) {
         self.color = color

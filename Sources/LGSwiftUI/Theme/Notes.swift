@@ -18,8 +18,20 @@
  RectangleButton
  CircleButton + PrimaryGradient
  CircleToggleButton + PrimaryGradient
-
+ CircleStatusButton + PrimaryGradient
  
+ ************* VALUE *************
+ smallValue
+ mediumValue
+ largeValue
+ veryLargeValue
+ 
+ ************* MARGIN *************
+ smallMargin
+ mediumMargin
+ largeMargin
+ veryLargeMargin
+
  ************* LABEL STYLE *************
  CustomIcon
  

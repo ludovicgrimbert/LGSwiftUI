@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+public extension Text {
+    func textStyle<Style: ViewModifier>(_ style: Style) -> some View {
+        ModifiedContent(content: self, modifier: style)
+    }
+}
+
 public struct H1Style: ViewModifier {
     public init() {}
     @Environment(\.colorScheme) var colorScheme
