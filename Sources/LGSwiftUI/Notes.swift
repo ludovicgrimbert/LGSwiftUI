@@ -17,6 +17,8 @@
  PrimaryButton
  RectangleButton
  CircleButton + PrimaryGradient
+ CircleToggleButton + PrimaryGradient
+
  
  ************* LABEL STYLE *************
  CustomIcon

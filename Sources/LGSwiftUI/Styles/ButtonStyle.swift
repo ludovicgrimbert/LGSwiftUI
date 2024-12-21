@@ -100,7 +100,6 @@ public struct CircleButtonStyle: ButtonStyle {
     @Environment(\.theme) var theme
     @Environment(\.body1) var font
     
-    
     public init(maxValue: CGFloat) {
         self.maxValue = maxValue
     }
@@ -125,7 +124,6 @@ public struct CircleToggleButtonStyle: ButtonStyle {
     @Environment(\.theme) var theme
     @Environment(\.body1) var font
     
-    
     public init(maxValue: CGFloat, isToggle: Bool) {
         self.maxValue = maxValue
         self.isToggle = isToggle
@@ -134,7 +132,7 @@ public struct CircleToggleButtonStyle: ButtonStyle {
     var isToggle: Bool
 
     
-    public func makeBody(configuration: Configuration) -> some View {        
+    public func makeBody(configuration: Configuration) -> some View {
         switch (isToggle, colorScheme) {
         case (true, .light):
             configuration.label
@@ -192,7 +190,68 @@ public struct CircleToggleButtonStyle: ButtonStyle {
                 )
                 .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
         }
-        
+    }
+}
+
+public struct CircleStatusButtonStyle: ButtonStyle {
+    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.theme) var theme
+    @Environment(\.body1) var font
+    
+    public init(maxValue: CGFloat, status: ThemeStatus) {
+        self.maxValue = maxValue
+        self.status = status
+    }
+    var maxValue: CGFloat
+    var status: ThemeStatus
+    
+    public func makeBody(configuration: Configuration) -> some View {
+        switch status {
+        case .initial:
+            configuration.label
+                .foregroundColor(theme.initialStatusColor)
+                .font(font)
+                .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
+                .background(theme.backgroundStatusColor.opacity(configuration.isPressed ? 0.7 : 1))
+                .clipShape(Circle())
+                .overlay(
+                    PrimaryGradient()
+                )
+                .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
+        case .progress:
+            configuration.label
+                .foregroundColor(theme.progressStatusColor)
+                .font(font)
+                .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
+                .background(theme.backgroundStatusColor.opacity(configuration.isPressed ? 0.7 : 1))
+                .clipShape(Circle())
+                .overlay(
+                    PrimaryGradient()
+                )
+                .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
+        case .accepted:
+            configuration.label
+                .foregroundColor(theme.acceptedStatusColor)
+                .font(font)
+                .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
+                .background(theme.backgroundStatusColor.opacity(configuration.isPressed ? 0.7 : 1))
+                .clipShape(Circle())
+                .overlay(
+                    PrimaryGradient()
+                )
+                .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
+        case .refused:
+            configuration.label
+                .foregroundColor(theme.refusedStatusColor)
+                .font(font)
+                .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
+                .background(theme.backgroundStatusColor.opacity(configuration.isPressed ? 0.7 : 1))
+                .clipShape(Circle())
+                .overlay(
+                    PrimaryGradient()
+                )
+                .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
+        }
     }
 }
 

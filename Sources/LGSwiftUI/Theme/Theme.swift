@@ -27,6 +27,11 @@ public protocol Theme: Sendable {
     var darkGradient2Color: Color { get }
     var lightToggleColor: Color { get }
     var darkToggleColor: Color { get }
+    var backgroundStatusColor: Color { get }
+    var initialStatusColor: Color { get }
+    var progressStatusColor: Color { get }
+    var acceptedStatusColor: Color { get }
+    var refusedStatusColor: Color { get }
     
 }
 
@@ -50,7 +55,11 @@ public extension Theme {
     var darkGradient2Color: Color { Color.green }
     var lightToggleColor: Color { Color.green }
     var darkToggleColor: Color { Color.green }
-    
+    var backgroundStatusColor: Color { Color.green }
+    var initialStatusColor: Color { Color.green }
+    var progressStatusColor: Color { Color.green }
+    var acceptedStatusColor: Color { Color.green }
+    var refusedStatusColor: Color { Color.green }
     
 }
 
@@ -85,5 +94,10 @@ struct DefaultTheme: Theme {
     var darkGradient2Color: Color = .green
     var lightToggleColor: Color = .green
     var darkToggleColor: Color = .green
+    var backgroundStatusColor: Color = .green
+    var initialStatusColor: Color = .green
+    var progressStatusColor: Color = .green
+    var acceptedStatusColor: Color = .green
+    var refusedStatusColor: Color = .green
 }
 
