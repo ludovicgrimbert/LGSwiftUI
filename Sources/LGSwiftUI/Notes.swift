@@ -12,7 +12,11 @@
  Secondary
  
  ************* BUTTON STYLE *************
-
+ SimpleButton
+ ClearButton
+ PrimaryButton
+ RectangleButton
+ CircleButton + PrimaryGradient
  
  ************* LABEL STYLE *************
  CustomIcon
