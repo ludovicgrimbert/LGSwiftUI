@@ -25,6 +25,8 @@ public protocol Theme: Sendable {
     var darkGradient1Color: Color { get }
     var lightGradient2Color: Color { get }
     var darkGradient2Color: Color { get }
+    var lightToggleColor: Color { get }
+    var darkToggleColor: Color { get }
     
 }
 
@@ -46,6 +48,8 @@ public extension Theme {
     var darkGradient1Color: Color { Color.green }
     var lightGradient2Color: Color { Color.green }
     var darkGradient2Color: Color { Color.green }
+    var lightToggleColor: Color { Color.green }
+    var darkToggleColor: Color { Color.green }
     
     
 }
@@ -79,5 +83,7 @@ struct DefaultTheme: Theme {
     var darkGradient1Color: Color = .green
     var lightGradient2Color: Color = .green
     var darkGradient2Color: Color = .green
+    var lightToggleColor: Color = .green
+    var darkToggleColor: Color = .green
 }
 

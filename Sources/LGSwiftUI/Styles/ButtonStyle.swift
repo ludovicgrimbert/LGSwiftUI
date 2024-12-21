@@ -120,6 +120,82 @@ public struct CircleButtonStyle: ButtonStyle {
     }
 }
 
+public struct CircleToggleButtonStyle: ButtonStyle {
+    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.theme) var theme
+    @Environment(\.body1) var font
+    
+    
+    public init(maxValue: CGFloat, isToggle: Bool) {
+        self.maxValue = maxValue
+        self.isToggle = isToggle
+    }
+    var maxValue: CGFloat
+    var isToggle: Bool
+
+    
+    public func makeBody(configuration: Configuration) -> some View {        
+        switch (isToggle, colorScheme) {
+        case (true, .light):
+            configuration.label
+                .foregroundColor(theme.lightToggleColor)
+                .font(font)
+                .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
+                .background(theme.lightPrimaryColor.opacity(configuration.isPressed ? 0.7 : 1))
+                .clipShape(Circle())
+                .overlay(
+                    PrimaryGradient()
+                )
+                .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
+        case (false, .light):
+            configuration.label
+                .foregroundColor(theme.lightTextColor)
+                .font(font)
+                .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
+                .background(theme.lightPrimaryColor.opacity(configuration.isPressed ? 0.7 : 1))
+                .clipShape(Circle())
+                .overlay(
+                    PrimaryGradient()
+                )
+                .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
+        case (true, .dark):
+            configuration.label
+                .foregroundColor(theme.darkToggleColor)
+                .font(font)
+                .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
+                .background(theme.darkPrimaryColor.opacity(configuration.isPressed ? 0.7 : 1))
+                .clipShape(Circle())
+                .overlay(
+                    PrimaryGradient()
+                )
+                .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
+        case (false, .dark):
+            configuration.label
+                .foregroundColor(theme.darkTextColor)
+                .font(font)
+                .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
+                .background(theme.darkPrimaryColor.opacity(configuration.isPressed ? 0.7 : 1))
+                .clipShape(Circle())
+                .overlay(
+                    PrimaryGradient()
+                )
+                .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
+        default:
+            configuration.label
+                .foregroundColor(theme.lightTextColor)
+                .font(font)
+                .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
+                .background(theme.lightPrimaryColor.opacity(configuration.isPressed ? 0.7 : 1))
+                .clipShape(Circle())
+                .overlay(
+                    PrimaryGradient()
+                )
+                .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
+        }
+        
+    }
+}
+
 struct PrimaryGradient: View {
     @Environment(\.theme) var theme
 
