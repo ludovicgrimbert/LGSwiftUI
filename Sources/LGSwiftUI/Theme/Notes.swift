@@ -32,6 +32,10 @@
  largeMargin
  veryLargeMargin
 
+ ************* HUNDRED *************
+oneHundred
+twoHundred
+ 
  ************* LABEL STYLE *************
  CustomIcon
  

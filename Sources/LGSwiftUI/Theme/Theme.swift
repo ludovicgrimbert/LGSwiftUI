@@ -45,6 +45,10 @@ public protocol Theme: Sendable {
     var largeMargin: CGFloat { get }
     var veryLarge: CGFloat { get }
     
+    //    ************* HUNDRED *************
+    var oneHundred: CGFloat { get }
+    var twoHundred: CGFloat { get }
+    
 }
 
 public extension Theme {
@@ -84,6 +88,10 @@ public extension Theme {
     var mediumMargin: CGFloat { 16.0 }
     var largeMargin: CGFloat { 24.0 }
     var veryLarge: CGFloat { 32.0 }
+    
+    //    ************* HUNDRED *************
+    var oneHundred: CGFloat { 100.0 }
+    var twoHundred: CGFloat { 200.0 }
 }
 
 enum ThemeKey: EnvironmentKey {
