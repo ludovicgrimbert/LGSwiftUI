@@ -8,6 +8,9 @@
 import SwiftUI
 
 public struct CustomIconLabelStyle: LabelStyle {
+    @Environment(\.theme) var theme
+
+    
     public init(color: Color, size: CGFloat) {
         self.color = color
         self.size = size
@@ -21,7 +24,7 @@ public struct CustomIconLabelStyle: LabelStyle {
         } icon: {
             configuration.icon
                 .imageScale(.small)
-                .foregroundColor(.white)
+                .foregroundColor(theme.darkTextColor)
                 .background(RoundedRectangle(cornerRadius: 7 * size).frame(width: 28 * size, height: 28 * size).foregroundColor(color))
         }
     }

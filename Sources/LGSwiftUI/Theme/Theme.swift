@@ -8,27 +8,45 @@
 import SwiftUI
 
 public protocol Theme: Sendable {
-//    ************* BACKGROUND STYLE *************
-    var lightPrimaryBackgroundColor: Color { get set }
-    var darkPrimaryBackgroundColor: Color { get set }
-    var lightSecondaryBackgroundColor: Color { get set }
-    var darkSecondaryBackgroundColor: Color { get set }
+    //    ************* BACKGROUND STYLE *************
+    var lightPrimaryBackgroundColor: Color { get }
+    var darkPrimaryBackgroundColor: Color { get }
+    var lightSecondaryBackgroundColor: Color { get }
+    var darkSecondaryBackgroundColor: Color { get }
     
+    //    ************* TEXT STYLE *************
+    var lightTextColor: Color { get }
+    var darkTextColor: Color { get }
+    
+    //    ************* BUTTON STYLE *************
+    var lightPrimaryColor: Color { get }
+    var darkPrimaryColor: Color { get }
+    var lightGradient1Color: Color { get }
+    var darkGradient1Color: Color { get }
+    var lightGradient2Color: Color { get }
+    var darkGradient2Color: Color { get }
     
 }
 
-extension Theme {
+public extension Theme {
     //    ************* BACKGROUND STYLE *************
-   // var lightPrimaryBackgroundColor: Color { Color.blue }
-//    var darkPrimaryBackgroundColor: Color { Color.blue }
-//    var lightSecondaryBackgroundColor: Color { Color.blue }
-//    var darkSecondaryBackgroundColor: Color { Color.blue }
+    var lightPrimaryBackgroundColor: Color { Color.green }
+    var darkPrimaryBackgroundColor: Color { Color.green }
+    var lightSecondaryBackgroundColor: Color { Color.green }
+    var darkSecondaryBackgroundColor: Color { Color.green }
     
-    var lightPrimaryBackgroundColor: Color { get{ return .green } set{} }
-    var darkPrimaryBackgroundColor: Color { get{ return .green } set{} }
-    var lightSecondaryBackgroundColor: Color { get{ return .green } set{} }
-    var darkSecondaryBackgroundColor: Color { get{ return .green } set{} }
-
+    //    ************* TEXT STYLE *************
+    var lightTextColor: Color { Color.green }
+    var darkTextColor: Color { Color.green }
+    
+    //    ************* BUTTON STYLE *************
+    var lightPrimaryColor: Color { Color.green }
+    var darkPrimaryColor: Color { Color.green }
+    var lightGradient1Color: Color { Color.green }
+    var darkGradient1Color: Color { Color.green }
+    var lightGradient2Color: Color { Color.green }
+    var darkGradient2Color: Color { Color.green }
+    
     
 }
 
@@ -50,7 +68,16 @@ struct DefaultTheme: Theme {
     var lightSecondaryBackgroundColor: Color = .green
     var darkSecondaryBackgroundColor: Color = .green
     
+    //    ************* TEXT STYLE *************
+    var lightTextColor: Color = .green
+    var darkTextColor: Color = .green
     
-    
+    //    ************* BUTTON STYLE *************
+    var lightPrimaryColor: Color = .green
+    var darkPrimaryColor: Color = .green
+    var lightGradient1Color: Color = .green
+    var darkGradient1Color: Color = .green
+    var lightGradient2Color: Color = .green
+    var darkGradient2Color: Color = .green
 }
 

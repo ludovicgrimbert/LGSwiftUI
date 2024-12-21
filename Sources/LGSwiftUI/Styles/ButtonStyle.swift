@@ -9,10 +9,7 @@ import SwiftUI
 
 public struct SimpleButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
-    @Environment(\.lightPrimary) var lightPrimaryColor
-    @Environment(\.darkPrimary) var darkPrimaryColor
-    @Environment(\.lightText) var lightTextColor
-    @Environment(\.darkText) var darkTextColor
+    @Environment(\.theme) var theme
     @Environment(\.mediumValue) var mediumValue
     @Environment(\.body1) var font
     
@@ -23,18 +20,17 @@ public struct SimpleButtonStyle: ButtonStyle {
     
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .foregroundColor((colorScheme == .light ? lightTextColor : darkTextColor))
+            .foregroundColor((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor))
             .font(font)
             .frame(maxWidth: maxValue, maxHeight: mediumValue, alignment: .center)
-            .background((colorScheme == .light ? lightPrimaryColor : darkPrimaryColor).opacity(configuration.isPressed ? 0.7 : 1))
+            .background((colorScheme == .light ? theme.lightPrimaryColor : theme.darkPrimaryColor).opacity(configuration.isPressed ? 0.7 : 1))
             .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
     }
 }
 
 public struct ClearButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
-    @Environment(\.lightText) var lightTextColor
-    @Environment(\.darkText) var darkTextColor
+    @Environment(\.theme) var theme
     @Environment(\.mediumValue) var mediumValue
     @Environment(\.body1) var font
     
@@ -45,7 +41,7 @@ public struct ClearButtonStyle: ButtonStyle {
     
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .foregroundColor((colorScheme == .light ? lightTextColor : darkTextColor))
+            .foregroundColor((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor))
             .font(font)
             .frame(maxWidth: maxValue, maxHeight: mediumValue, alignment: .center)
             .background(Color.clear.opacity(configuration.isPressed ? 0.7 : 1))
@@ -56,10 +52,7 @@ public struct ClearButtonStyle: ButtonStyle {
 
 public struct PrimaryButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
-    @Environment(\.lightPrimary) var lightPrimaryColor
-    @Environment(\.darkPrimary) var darkPrimaryColor
-    @Environment(\.lightText) var lightTextColor
-    @Environment(\.darkText) var darkTextColor
+    @Environment(\.theme) var theme
     @Environment(\.mediumValue) var mediumValue
     @Environment(\.body1) var font
     
@@ -70,10 +63,11 @@ public struct PrimaryButtonStyle: ButtonStyle {
     
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .foregroundColor((colorScheme == .light ? lightTextColor : darkTextColor))
+            .foregroundColor((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor))
             .font(font)
             .frame(maxWidth: maxValue, maxHeight: mediumValue, alignment: .center)
-            .background((colorScheme == .light ? lightPrimaryColor : darkPrimaryColor).opacity(configuration.isPressed ? 0.7 : 1))
+            .border((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor), width: 0.5)
+            .background((colorScheme == .light ? theme.lightPrimaryColor : theme.darkPrimaryColor).opacity(configuration.isPressed ? 0.7 : 1))
             .clipShape(RoundedRectangle(cornerRadius: mediumValue/2))
             .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
     }
@@ -81,10 +75,7 @@ public struct PrimaryButtonStyle: ButtonStyle {
 
 public struct RectangleButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
-    @Environment(\.lightPrimary) var lightPrimaryColor
-    @Environment(\.darkPrimary) var darkPrimaryColor
-    @Environment(\.lightText) var lightTextColor
-    @Environment(\.darkText) var darkTextColor
+    @Environment(\.theme) var theme
     @Environment(\.mediumValue) var mediumValue
     @Environment(\.body1) var font
     
@@ -95,25 +86,18 @@ public struct RectangleButtonStyle: ButtonStyle {
     
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .foregroundColor((colorScheme == .light ? lightTextColor : darkTextColor))
+            .foregroundColor((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor))
             .font(font)
             .frame(maxWidth: maxValue, maxHeight: mediumValue, alignment: .center)
-            .border((colorScheme == .light ? lightTextColor : darkTextColor), width: 0.5)
-            .background((colorScheme == .light ? lightPrimaryColor : darkPrimaryColor).opacity(configuration.isPressed ? 0.7 : 1))
+            .border((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor), width: 0.5)
+            .background((colorScheme == .light ? theme.lightPrimaryColor : theme.darkPrimaryColor).opacity(configuration.isPressed ? 0.7 : 1))
             .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
     }
 }
 
-
-
-
-// REMOTE TV
 public struct CircleButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
-    @Environment(\.lightPrimary) var lightPrimaryColor
-    @Environment(\.darkPrimary) var darkPrimaryColor
-    @Environment(\.lightText) var lightTextColor
-    @Environment(\.darkText) var darkTextColor
+    @Environment(\.theme) var theme
     @Environment(\.body1) var font
     
     
@@ -124,10 +108,10 @@ public struct CircleButtonStyle: ButtonStyle {
     
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .foregroundColor((colorScheme == .light ? lightTextColor : darkTextColor))
+            .foregroundColor((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor))
             .font(font)
             .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
-            .background((colorScheme == .light ? lightPrimaryColor : darkPrimaryColor).opacity(configuration.isPressed ? 0.7 : 1))
+            .background((colorScheme == .light ? theme.lightPrimaryColor : theme.darkPrimaryColor).opacity(configuration.isPressed ? 0.7 : 1))
             .clipShape(Circle())
             .overlay(
                 PrimaryGradient()
@@ -137,9 +121,7 @@ public struct CircleButtonStyle: ButtonStyle {
 }
 
 struct PrimaryGradient: View {
-    
-    @Environment(\.lightAccent) var lightAccentColor
-    @Environment(\.darkAccent) var darkAccentColor
+    @Environment(\.theme) var theme
 
     var body: some View {
         Capsule()
@@ -147,8 +129,8 @@ struct PrimaryGradient: View {
                 LinearGradient(
                     gradient: Gradient(
                         colors: [
-                            lightAccentColor,
-                            darkAccentColor
+                            theme.darkGradient1Color,
+                            theme.darkGradient2Color
                         ]
                     ),
                     startPoint: .top,

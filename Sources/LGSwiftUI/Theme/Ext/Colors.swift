@@ -1,6 +1,6 @@
 //
 //  SwiftUIView.swift
-//  
+//
 //
 //  Created by Ludovic Grimbert on 21/11/2021.
 //
@@ -95,7 +95,7 @@ public struct CaptionLightPrimaryBackgroundColorKey: EnvironmentKey {
 }
 
 public struct CaptionDarkPrimaryBackgroundColorKey: EnvironmentKey {
-    public static let defaultValue =   Color.black
+    public static let defaultValue =   Color.red
 }
 
 public extension EnvironmentValues {
