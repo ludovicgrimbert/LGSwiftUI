@@ -31,5 +31,7 @@ let package = Package(
         .testTarget(
             name: "LGSwiftUITests",
             dependencies: ["LGSwiftUI"]),
-    ]
+    ],
+    swiftLanguageVersions: [.version("6")]
+
 )
