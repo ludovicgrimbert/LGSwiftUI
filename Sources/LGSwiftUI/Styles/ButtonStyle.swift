@@ -12,16 +12,19 @@ public struct SimpleButtonStyle: ButtonStyle {
     @Environment(\.theme) var theme
     @Environment(\.body1) var font
     
-    public init(maxValue: CGFloat) {
+    public init(maxValue: CGFloat,
+                textIsCenter: Bool = true ) {
         self.maxValue = maxValue
+        self.textIsCenter = textIsCenter
     }
     var maxValue: CGFloat
+    var textIsCenter: Bool
     
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .foregroundColor((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor))
             .font(font)
-            .frame(maxWidth: maxValue, maxHeight: theme.mediumValue, alignment: .center)
+            .frame(maxWidth: maxValue, maxHeight: theme.mediumValue, alignment: textIsCenter ? .center : .leading)
             .background((colorScheme == .light ? theme.lightPrimaryColor : theme.darkPrimaryColor).opacity(configuration.isPressed ? 0.7 : 1))
             .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
     }
