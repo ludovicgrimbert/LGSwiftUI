@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:6.1
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -8,9 +8,8 @@ let package = Package(
     platforms: [
             // Add support for all platforms starting from a specific version.
             .macOS(.v10_15),
-            .iOS(.v14),
-            .watchOS(.v7),
-            //.tvOS(.v11)
+            .iOS(.v17),
+            .watchOS(.v7)
         ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
@@ -32,6 +31,6 @@ let package = Package(
             name: "LGSwiftUITests",
             dependencies: ["LGSwiftUI"]),
     ],
-    swiftLanguageVersions: [.version("6")]
+    swiftLanguageModes: [.version("6")]
 
 )

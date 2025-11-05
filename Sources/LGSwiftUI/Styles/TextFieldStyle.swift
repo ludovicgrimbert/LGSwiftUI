@@ -31,6 +31,7 @@ public struct CustomTextFieldStyle: TextFieldStyle {
         configuration
             .foregroundColor(color)
             .font(font)
+            .tint(color)
             .padding()
             .overlay(
                 RoundedRectangle(cornerRadius: cornerRadius)
