@@ -43,7 +43,7 @@ public protocol Theme: Sendable {
     var smallMargin: CGFloat { get }
     var mediumMargin: CGFloat { get }
     var largeMargin: CGFloat { get }
-    var veryLarge: CGFloat { get }
+    var veryLargeMargin: CGFloat { get }
     
     //    ************* HUNDRED *************
     var oneHundred: CGFloat { get }
@@ -87,7 +87,7 @@ public extension Theme {
     var smallMargin: CGFloat { 8.0 }
     var mediumMargin: CGFloat { 16.0 }
     var largeMargin: CGFloat { 24.0 }
-    var veryLarge: CGFloat { 32.0 }
+    var veryLargeMargin: CGFloat { 32.0 }
     
     //    ************* HUNDRED *************
     var oneHundred: CGFloat { 100.0 }
@@ -141,6 +141,6 @@ struct DefaultTheme: Theme {
     var smallMargin: CGFloat = 8.0
     var mediumMargin: CGFloat = 16.0
     var largeMargin: CGFloat = 24.0
-    var veryLarge: CGFloat = 32.0
+    var veryLargeMargin: CGFloat = 32.0
 }
 
