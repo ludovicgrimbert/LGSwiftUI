@@ -1,17 +1,17 @@
 //
-//  SearchField.swift
+//  UserInputField.swift
 //  LGSwiftUI
 //
 //  Created by Ludovic Grimbert on 10/11/2025.
 //
 import SwiftUI
 
-public struct SearchField: View {
+public struct UserInputField: View {
     public var placeholderColor: Color
     public var placeholderFont: Font
     public var textColor: Color
     public var textFont: Font
-
+    
     public var keyboardType: UIKeyboardType
     public var submitLabel: SubmitLabel
     public var placeholderLabel: String
@@ -77,9 +77,7 @@ public struct SearchField: View {
             }
         }
         .onSubmit {
-            if text.count < triggerValue {
-                searchButtonTapped?(text)
-            }
+            searchButtonTapped?(text)
             isTextFieldFocused = false
         }
         .submitLabel(submitLabel)
