@@ -10,10 +10,10 @@ import SwiftUI
 public struct BottomSheetView: View {
     @Environment(\.theme) var theme
     @Environment(\.h5) var h5
-    @Environment(\.subtitle2) var subtitle2
+    @Environment(\.caption) var caption
     
-    var height: CGFloat
     var title: String
+    var imageName: String?
     var description: String
     var actionTitle: String
     var action:  (() -> Void)?
@@ -21,16 +21,16 @@ public struct BottomSheetView: View {
     var cancel:  (() -> Void)?
     
     public init(
-        height: CGFloat,
         title: String,
+        imageName: String? = nil,
         description: String,
         actionTitle: String,
         action: (() -> Void)?,
         cancelTitle: String? = nil,
         cancel: (() -> Void)? = nil,
     ) {
-        self.height = height
         self.title = title
+        self.imageName = imageName
         self.description = description
         self.actionTitle = actionTitle
         self.action = action
@@ -40,27 +40,39 @@ public struct BottomSheetView: View {
     
     public var body: some View {
         GeometryReader { proxy in
-                VStack (spacing: theme.smallValue){
-                    Spacer().frame(height: theme.smallValue)
-                    
+                VStack (spacing: theme.smallValue) {
+                    if let imageName = imageName {
+                        Image(imageName)
+                            .renderingMode(.original)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(
+                                width: theme.mediumValue,
+                                height: theme.mediumValue
+                            )
+                    }
                     Text(title)
                         .foregroundColor(theme.darkTextColor)
                         .font(h5)
+                        .multilineTextAlignment(.center)
                         .lineLimit(2)
-                        .frame(width: proxy.size.width * 0.7)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity)
                     
                     Text(description)
                         .foregroundColor(theme.darkTextColor)
-                        .font(subtitle2)
+                        .font(caption)
+                        .multilineTextAlignment(.center)
                         .lineLimit(2)
-                        .frame(width: proxy.size.width * 0.7)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .frame(maxWidth: .infinity)
                     
                     Button(action: {
                         action?()
                     }) {
                         NeuButtonView(
                             title: actionTitle,
-                            width: proxy.size.width * 0.5
+                            width: proxy.size.width * 0.7
                         )
                     }
                     
@@ -70,7 +82,7 @@ public struct BottomSheetView: View {
                         }) {
                             NeuButtonView(
                                 title: cancelTitle,
-                                width: proxy.size.width * 0.5
+                                width: proxy.size.width * 0.7
                             )
                         }
                     }
@@ -98,4 +110,5 @@ public struct BottomSheetView: View {
         }
     }
 }
+
 

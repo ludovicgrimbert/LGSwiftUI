@@ -7,9 +7,9 @@ let package = Package(
     name: "LGSwiftUI",
     platforms: [
             // Add support for all platforms starting from a specific version.
-            .macOS(.v10_15),
+//            .macOS(.v10_15),
             .iOS(.v17),
-            .watchOS(.v7)
+//            .watchOS(.v7)
         ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
