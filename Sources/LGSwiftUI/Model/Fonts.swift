@@ -41,6 +41,9 @@ public struct CaptionFontBody2Key: EnvironmentKey {
 public struct CaptionFontCaptionKey: EnvironmentKey {
     public static let defaultValue =   Font.system(size: 12,weight: .regular)
 }
+public struct CaptionFontCaption2Key: EnvironmentKey {
+    public static let defaultValue =   Font.system(size: 12,weight: .bold)
+}
 public struct CaptionFontOverlineKey: EnvironmentKey {
     public static let defaultValue =   Font.system(size: 10,weight: .regular)
 }
@@ -89,6 +92,10 @@ public extension EnvironmentValues {
     var caption: Font {
         get { self[CaptionFontCaptionKey.self] }
         set { self[CaptionFontCaptionKey.self] = newValue }
+    }
+    var caption2: Font {
+        get { self[CaptionFontCaption2Key.self] }
+        set { self[CaptionFontCaption2Key.self] = newValue }
     }
     var overline: Font {
         get { self[CaptionFontOverlineKey.self] }

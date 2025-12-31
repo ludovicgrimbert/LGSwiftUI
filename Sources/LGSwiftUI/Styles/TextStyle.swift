@@ -157,6 +157,19 @@ public struct CaptionStyle: ViewModifier {
     }
 }
 
+public struct Caption2Style: ViewModifier {
+    public init() {}
+    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.theme) var theme
+    @Environment(\.caption2) var font
+    
+    public func body(content: Content) -> some View {
+        content
+            .font(font)
+            .foregroundColor(colorScheme == .light ? theme.lightTextColor : theme.darkTextColor)
+    }
+}
+
 public struct OverlineStyle: ViewModifier {
     public init() {}
     @Environment(\.colorScheme) var colorScheme
