@@ -39,6 +39,19 @@ matching `light*`/`dark*` colour. `colorScheme:` forces the side the library's s
 without touching system UI; use `.preferredColorScheme(_:)` at the scene root if you want
 alerts and keyboards to follow too.
 
+⚠️ A forced `colorScheme` does **not** survive a `.sheet` / `.fullScreenCover`: the
+presented content starts from the system colour scheme (the theme itself is inherited).
+Re-apply `.lgTheme(theme, colorScheme:)` on each sheet's content — the simplest way is a
+single app-level "screen" modifier used by screens and sheets alike:
+
+```swift
+extension View {
+    func appScreen() -> some View {
+        lgPrimaryBackground().lgTheme(AppTheme(), colorScheme: .dark)
+    }
+}
+```
+
 ### Layout tokens
 
 | Group | Tokens | Use for |

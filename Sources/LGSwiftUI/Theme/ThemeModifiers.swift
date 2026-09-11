@@ -23,6 +23,12 @@ public extension View {
     ///     in this hierarchy — system UI (alerts, keyboard, sheets' chrome) keeps following
     ///     the device. Use `.preferredColorScheme(_:)` at the scene root instead if you
     ///     want the whole scene, system UI included, to switch.
+    ///
+    /// - Important: `\.theme` is inherited by presented sheets, but a forced `colorScheme`
+    ///   is **not** — a `.sheet`/`.fullScreenCover` is a new presentation context that
+    ///   starts from the system colour scheme. Apply `lgTheme(_:colorScheme:)` (typically
+    ///   through your app's screen modifier) to the content of every sheet as well, or use
+    ///   `.preferredColorScheme(_:)`.
     func lgTheme(_ theme: Theme, colorScheme: ColorScheme? = nil) -> some View {
         modifier(LGThemeModifier(theme: theme, colorScheme: colorScheme))
     }
