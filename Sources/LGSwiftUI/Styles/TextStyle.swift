@@ -1,6 +1,6 @@
 //
-//  SwiftUIView.swift
-//
+//  TextStyle.swift
+//  LGSwiftUI
 //
 //  Created by Ludovic Grimbert on 21/11/2021.
 //

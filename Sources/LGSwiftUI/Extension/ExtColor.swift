@@ -1,6 +1,6 @@
 //
-//  SwiftUIView 2.swift
-//  
+//  ExtColor.swift
+//  LGSwiftUI
 //
 //  Created by Ludovic Grimbert on 21/11/2021.
 //

@@ -82,11 +82,6 @@ public struct UserInputField: View {
         }
         .submitLabel(submitLabel)
         .disabled(isDisabled)
-        .textFieldStyle(
-            CustomTextFieldStyle(
-                color: textColor,
-                font: textFont
-            )
-        )
+        .lgTextFieldStyle(color: textColor, font: textFont)
     }
 }

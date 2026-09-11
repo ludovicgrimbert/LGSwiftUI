@@ -79,6 +79,8 @@ public struct NeumorphismView: View {
     }
     
     public static func getShape(style: NeumorphismStyle) -> some Shape {
+        // SwiftUI's own `AnyShape` (iOS 16+). The library used to ship a duplicate
+        // with the same name, which made the symbol ambiguous in any file importing both.
         switch style {
         case .roundedRectangle(let cornerRadius):
             return AnyShape(RoundedRectangle(cornerRadius: cornerRadius))
@@ -88,16 +90,6 @@ public struct NeumorphismView: View {
             return AnyShape(Triangle())
         }
     }
-}
-
-public struct AnyShape: Shape, Sendable {
-    private let _path: @Sendable (CGRect) -> Path
-    
-    public init<S: Shape & Sendable>(_ shape: S) {
-        self._path = { rect in shape.path(in: rect) }
-    }
-    
-    public func path(in rect: CGRect) -> Path { _path(rect) }
 }
 
 public struct Triangle: Shape {
