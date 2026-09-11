@@ -4,6 +4,17 @@ All notable changes to this package. The format follows [Keep a Changelog](https
 the package uses [SemVer](https://semver.org) — while on `0.x`, minor versions may break source compatibility
 and are called out below.
 
+## [Unreleased]
+
+### Added
+- `LGSwiftUI.xcworkspace` (package + example) and `Example/LGSwiftUIExample`, an xcodegen-generated
+  gallery app showing every token, text role, button style and component, with colour-scheme and
+  Dynamic Type switches. Depends on the library by local path.
+
+### Changed
+- Documentation: a forced `colorScheme` passed to `lgTheme(_:colorScheme:)` does not cross a sheet
+  boundary; re-apply it on sheet content or use `preferredColorScheme`.
+
 ## [0.3.0] - 2026-09-11
 
 ### Added

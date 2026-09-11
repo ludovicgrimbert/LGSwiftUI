@@ -125,12 +125,21 @@ provides); deprecated symbols point to their replacement:
 | `.textFieldStyle(CustomTextFieldStyle(…))` | `.lgTextFieldStyle(…)` |
 | `.environment(\.theme, t).environment(\.colorScheme, .dark)` | `.lgTheme(t, colorScheme: .dark)` |
 
+## Example app
+
+Open `LGSwiftUI.xcworkspace`: it contains the package and `Example/LGSwiftUIExample`, a
+gallery of every token, text role, button style and component, built against the working
+tree of the library. The toolbar switches the colour scheme and the Dynamic Type size so
+you can see the tokens and controls scale. The project is generated with
+[xcodegen](https://github.com/yonaskolb/XcodeGen) from `Example/project.yml`
+(`cd Example && xcodegen generate` after adding files).
+
 ## Development
 
 The package is iOS-only, so build and test through an iOS simulator:
 
 ```sh
-xcodebuild test -scheme LGSwiftUI -destination 'platform=iOS Simulator,name=iPhone 17'
+xcodebuild test -workspace LGSwiftUI.xcworkspace -scheme LGSwiftUI -destination 'platform=iOS Simulator,name=iPhone 17'
 ```
 
 ### Snapshot tests
