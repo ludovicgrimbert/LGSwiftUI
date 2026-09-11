@@ -15,37 +15,90 @@ struct ThemeTokenTests {
 
     private struct BareTheme: Theme {}
 
-    @Test("Default values are unchanged")
-    func defaultValues() {
+    @Test("Default sizes are unchanged")
+    func defaultSizes() {
         let theme = BareTheme()
-        #expect(theme.smallValue == 24)
-        #expect(theme.mediumValue == 48)
-        #expect(theme.largeValue == 80)
-        #expect(theme.veryLargeValue == 160)
+        #expect(theme.size == ThemeSize(s: 24, m: 48, l: 80, xl: 160))
     }
 
-    @Test("Default margins are unchanged")
-    func defaultMargins() {
+    @Test("Default spacing is unchanged")
+    func defaultSpacing() {
         let theme = BareTheme()
-        #expect(theme.smallMargin == 8)
+        #expect(theme.spacing == ThemeSpacing(xs: 8, s: 16, m: 24, l: 32, xl: 48))
+    }
+
+    @Test("Default radii match the values apps used as corner radii")
+    func defaultRadii() {
+        let theme = BareTheme()
+        #expect(theme.radius == ThemeRadius(s: 8, m: 24))
+    }
+
+    @available(*, deprecated) // exercises the deprecated flat tokens on purpose
+    @Test("Legacy flat tokens are derived from the groups")
+    func legacyTokensFollowGroups() {
+        struct WideTheme: Theme { var size = ThemeSize(l: 120); var spacing = ThemeSpacing(xs: 10) }
+        let theme = WideTheme()
+        #expect(theme.smallValue == 24)
+        #expect(theme.mediumValue == 48)
+        #expect(theme.largeValue == 120)
+        #expect(theme.veryLargeValue == 160)
+        #expect(theme.smallMargin == 10)
         #expect(theme.mediumMargin == 16)
         #expect(theme.largeMargin == 24)
         #expect(theme.veryLargeMargin == 32)
-    }
-
-    @Test("Hundreds are unchanged")
-    func hundreds() {
-        let theme = BareTheme()
         #expect(theme.oneHundred == 100)
         #expect(theme.twoHundred == 200)
     }
 
-    @Test("A theme can override a single token")
+    @Test("A theme can override a single group")
     func singleOverride() {
-        struct WideTheme: Theme { var largeValue: CGFloat = 120 }
+        struct WideTheme: Theme { var size = ThemeSize(l: 120) }
         let theme = WideTheme()
-        #expect(theme.largeValue == 120)
-        #expect(theme.mediumValue == 48)
+        #expect(theme.size.l == 120)
+        #expect(theme.size.m == 48)
+        #expect(theme.spacing.m == 24)
+    }
+}
+
+@Suite("Dynamic Type scaling")
+struct ScalingTests {
+
+    @Test("Default Dynamic Type setting leaves sizes untouched")
+    func identityAtDefault() {
+        let size = ThemeSize()
+        #expect(DynamicTypeSize.large.lgScaleFactor == 1)
+        #expect(size.scaled(for: .large) == size)
+    }
+
+    @Test("Sizes grow with accessibility settings, following the .body curve")
+    func growsWithAccessibility() {
+        let size = ThemeSize()
+        let scaled = size.scaled(for: .accessibility3)
+        #expect(abs(DynamicTypeSize.accessibility3.lgScaleFactor - 40.0 / 17.0) < 0.0001)
+        #expect(scaled.m > size.m)
+        #expect(abs(scaled.m - 48 * 40.0 / 17.0) < 0.0001)
+    }
+
+    @Test("Sizes shrink for the smallest settings")
+    func shrinksForSmall() {
+        #expect(DynamicTypeSize.xSmall.lgScaleFactor < 1)
+    }
+
+    @Test("Text roles keep their historical base metrics")
+    func textRoleMetrics() {
+        #expect(TextRole.h1.size == 96 && TextRole.h1.weight == .bold)
+        #expect(TextRole.h2.size == 60 && TextRole.h2.weight == .regular)
+        #expect(TextRole.h3.size == 48 && TextRole.h3.weight == .bold)
+        #expect(TextRole.h4.size == 34 && TextRole.h4.weight == .regular)
+        #expect(TextRole.h5.size == 24 && TextRole.h5.weight == .bold)
+        #expect(TextRole.h6.size == 20 && TextRole.h6.weight == .regular)
+        #expect(TextRole.subtitle1.size == 16 && TextRole.subtitle1.weight == .regular)
+        #expect(TextRole.subtitle2.size == 16 && TextRole.subtitle2.weight == .bold)
+        #expect(TextRole.body1.size == 14 && TextRole.body1.weight == .regular)
+        #expect(TextRole.body2.size == 14 && TextRole.body2.weight == .bold)
+        #expect(TextRole.caption.size == 12 && TextRole.caption.weight == .regular)
+        #expect(TextRole.caption2.size == 12 && TextRole.caption2.weight == .bold)
+        #expect(TextRole.overline.size == 10 && TextRole.overline.weight == .regular)
     }
 }
 

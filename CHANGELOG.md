@@ -4,14 +4,26 @@ All notable changes to this package. The format follows [Keep a Changelog](https
 the package uses [SemVer](https://semver.org) — while on `0.x`, minor versions may break source compatibility
 and are called out below.
 
-## [Unreleased]
+## [0.3.0] - 2026-09-11
 
 ### Added
+- **Semantic layout tokens**: `theme.spacing` (`xs/s/m/l/xl` = 8/16/24/32/48), `theme.size` (`s/m/l/xl` =
+  24/48/80/160) and `theme.radius` (`s/m` = 8/24) as `ThemeSpacing`/`ThemeSize`/`ThemeRadius` groups.
+  Values are the historical ones; the flat `smallValue`/`smallMargin`/… tokens are now deprecated aliases
+  derived from the groups, so an app that overrides `size` keeps both names consistent while migrating.
+- **Dynamic Type**: `TextRole` (`h1`…`overline`, with base size, weight and the system text style each
+  follows), `View.textStyle(_ role:)` / `LGTextStyle` (font + theme text colour) and `View.lgFont(_ role:)`
+  (font only). Sizes scale with the user's text setting via `@ScaledMetric`; at the default setting they
+  are exactly the historical fixed sizes (snapshots unchanged). `EnvironmentValues.lgScaledSize` exposes
+  `theme.size` scaled the same way for control heights and icon sizes; the library's button styles use
+  it, so buttons grow with their label instead of truncating it.
+- `View.lgBackground(_ level:)` / `LGBackgroundModifier` (`.primary`/`.secondary`), replacing the
+  `backgroundStyle(BackgroundPrimaryStyle())` composition.
 - `View.neumorphic(_:effect:color:width:height:…)` / `NeumorphicModifier`: draws a `NeumorphismView`
   behind any content, sized to the content or to an explicit frame. Pixel-identical to the
   `ZStack { NeumorphismView(width:height:); content }` composition apps wrote by hand (proven by test).
-- `NeumorphicButtonStyle`: text button on a neumorphic shape (theme defaults: `smallValue` radius,
-  `lowShadow`, `mediumValue` height, `h5`). Replaces the hand-written `NeuButtonView` helpers.
+- `NeumorphicButtonStyle`: text button on a neumorphic shape (theme defaults: `radius.m`, `lowShadow`,
+  scaled `size.m` height, `.h5` role). Replaces the hand-written `NeuButtonView` helpers.
 - `NeumorphismEffect` (`highShadow`, `highDeep`, `lowShadow`): the three treatments as an enum, so the
   never-rendering (`.low`, `.deep`) pair is no longer expressible. `NeumorphismView.init(style:effect:…)`
   and `NeumorphismStyle.shape`.
@@ -39,8 +51,22 @@ and are called out below.
   the `dark*` side of the theme: identical in dark mode (the only mode the apps ship), fixed in light mode.
 - `NeumorphismView.getShape(style:)` deprecated in favour of `NeumorphismStyle.shape`.
 - File headers corrected (`SwiftUIView.swift`, `File.swift` → actual file names).
+- `CircleToggleButtonStyle` and `CircleStatusButtonStyle` compute their label colour once instead of
+  duplicating the whole body per case; the three circle styles share one implementation. `PrimaryGradient`
+  (the ring around circle buttons) now uses the `light*` gradient pair in light mode instead of always the
+  `dark*` one — identical in dark mode, fixed in light mode (`ButtonStyles-light` snapshot re-recorded).
+- `NeumorphicButtonStyle` takes a `role: TextRole` (default `.h5`) instead of a `font: Font?`.
 
 ### Deprecated
+- The flat numeric tokens `smallValue`…`veryLargeValue`, `smallMargin`…`veryLargeMargin`, `oneHundred`,
+  `twoHundred` — see the new `spacing`/`size`/`radius` groups. Each message says which group to use.
+- The environment fonts `\.h1`…`\.overline` and their `CaptionFont*Key` types: they hand out fixed-size
+  fonts that ignore Dynamic Type. Use `.textStyle(.h5)` or `.lgFont(.h5)`.
+- The 13 per-role modifiers `H1Style()`…`OverlineStyle()`: use `.textStyle(.h1)` etc. They are now thin
+  wrappers over `LGTextStyle`, so existing call sites already scale with Dynamic Type.
+- `Text.textStyle<Style: ViewModifier>(_:)` and `View.backgroundStyle<Style: ViewModifier>(_:)`: both are
+  `View.modifier(_:)` under another name, and the latter shadows SwiftUI's own `backgroundStyle(_:)`.
+- `BackgroundPrimaryStyle` / `BackgroundSecondaryStyle`: use `.lgBackground(.primary/.secondary)`.
 - `CustomTextFieldStyle`: it can only be implemented through `TextFieldStyle`'s private `_body`
   extension point. Use `.lgTextFieldStyle(...)`.
 

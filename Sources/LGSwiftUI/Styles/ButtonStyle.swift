@@ -7,11 +7,16 @@
 
 import SwiftUI
 
+// All button styles read the theme and the colour scheme from the environment, use the
+// `body1` role for their label, and take their height from `\.lgScaledSize` so they grow
+// with Dynamic Type (identical to the fixed `theme.size.m` at the default setting).
+
+/// Flat text button: label on the primary colour, `size.m` tall at most.
 public struct SimpleButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.theme) var theme
-    @Environment(\.body1) var font
-    
+    @Environment(\.lgScaledSize) var size
+
     public init(maxValue: CGFloat,
                 textIsCenter: Bool = true ) {
         self.maxValue = maxValue
@@ -19,253 +24,200 @@ public struct SimpleButtonStyle: ButtonStyle {
     }
     var maxValue: CGFloat
     var textIsCenter: Bool
-    
+
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .foregroundColor((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor))
-            .font(font)
-            .frame(maxWidth: maxValue, maxHeight: theme.mediumValue, alignment: textIsCenter ? .center : .leading)
-            .background((colorScheme == .light ? theme.lightPrimaryColor : theme.darkPrimaryColor).opacity(configuration.isPressed ? 0.7 : 1))
+            .foregroundColor(theme.textColor(for: colorScheme))
+            .lgFont(.body1)
+            .frame(maxWidth: maxValue, maxHeight: size.m, alignment: textIsCenter ? .center : .leading)
+            .background(theme.primaryColor(for: colorScheme).opacity(configuration.isPressed ? 0.7 : 1))
             .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
     }
 }
 
+/// Text button without background.
 public struct ClearButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.theme) var theme
-    @Environment(\.body1) var font
-    
+    @Environment(\.lgScaledSize) var size
+
     public init(maxValue: CGFloat) {
         self.maxValue = maxValue
     }
     var maxValue: CGFloat
-    
+
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .foregroundColor((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor))
-            .font(font)
-            .frame(maxWidth: maxValue, maxHeight: theme.mediumValue, alignment: .center)
+            .foregroundColor(theme.textColor(for: colorScheme))
+            .lgFont(.body1)
+            .frame(maxWidth: maxValue, maxHeight: size.m, alignment: .center)
             .background(Color.clear.opacity(configuration.isPressed ? 0.7 : 1))
             .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
     }
 }
 
-
+/// Capsule-clipped text button with a hairline border.
 public struct PrimaryButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.theme) var theme
-    @Environment(\.body1) var font
-    
+    @Environment(\.lgScaledSize) var size
+
     public init(maxValue: CGFloat) {
         self.maxValue = maxValue
     }
     var maxValue: CGFloat
-    
+
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .foregroundColor((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor))
-            .font(font)
-            .frame(maxWidth: maxValue, maxHeight: theme.mediumValue, alignment: .center)
-            .border((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor), width: 0.5)
-            .background((colorScheme == .light ? theme.lightPrimaryColor : theme.darkPrimaryColor).opacity(configuration.isPressed ? 0.7 : 1))
-            .clipShape(RoundedRectangle(cornerRadius: theme.mediumValue/2))
+            .foregroundColor(theme.textColor(for: colorScheme))
+            .lgFont(.body1)
+            .frame(maxWidth: maxValue, maxHeight: size.m, alignment: .center)
+            .border(theme.textColor(for: colorScheme), width: 0.5)
+            .background(theme.primaryColor(for: colorScheme).opacity(configuration.isPressed ? 0.7 : 1))
+            .clipShape(RoundedRectangle(cornerRadius: size.m / 2))
             .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
     }
 }
 
+/// Rectangular text button with a hairline border.
 public struct RectangleButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.theme) var theme
-    @Environment(\.body1) var font
-    
+    @Environment(\.lgScaledSize) var size
+
     public init(maxValue: CGFloat) {
         self.maxValue = maxValue
     }
     var maxValue: CGFloat
-    
+
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .foregroundColor((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor))
-            .font(font)
-            .frame(maxWidth: maxValue, maxHeight: theme.mediumValue, alignment: .center)
-            .border((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor), width: 0.5)
-            .background((colorScheme == .light ? theme.lightPrimaryColor : theme.darkPrimaryColor).opacity(configuration.isPressed ? 0.7 : 1))
+            .foregroundColor(theme.textColor(for: colorScheme))
+            .lgFont(.body1)
+            .frame(maxWidth: maxValue, maxHeight: size.m, alignment: .center)
+            .border(theme.textColor(for: colorScheme), width: 0.5)
+            .background(theme.primaryColor(for: colorScheme).opacity(configuration.isPressed ? 0.7 : 1))
             .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
     }
 }
 
+/// Round icon button on the primary colour with a gradient ring.
 public struct CircleButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.theme) var theme
-    @Environment(\.body1) var font
-    
+
     public init(maxValue: CGFloat) {
         self.maxValue = maxValue
     }
     var maxValue: CGFloat
-    
+
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .foregroundColor((colorScheme == .light ? theme.lightTextColor : theme.darkTextColor))
-            .font(font)
-            .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
-            .background((colorScheme == .light ? theme.lightPrimaryColor : theme.darkPrimaryColor).opacity(configuration.isPressed ? 0.7 : 1))
-            .clipShape(Circle())
-            .overlay(
-                PrimaryGradient()
-            )
-            .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
+            .circleButtonBody(configuration: configuration,
+                              maxValue: maxValue,
+                              foreground: theme.textColor(for: colorScheme),
+                              background: theme.primaryColor(for: colorScheme))
     }
 }
 
+/// ``CircleButtonStyle`` whose label switches to the toggle colour when `isToggle` is on.
 public struct CircleToggleButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.theme) var theme
-    @Environment(\.body1) var font
-    
+
     public init(maxValue: CGFloat, isToggle: Bool) {
         self.maxValue = maxValue
         self.isToggle = isToggle
     }
     var maxValue: CGFloat
     var isToggle: Bool
-    
-    
+
     public func makeBody(configuration: Configuration) -> some View {
-        switch (isToggle, colorScheme) {
-        case (true, .light):
-            configuration.label
-                .foregroundColor(theme.lightToggleColor)
-                .font(font)
-                .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
-                .background(theme.lightPrimaryColor.opacity(configuration.isPressed ? 0.7 : 1))
-                .clipShape(Circle())
-                .overlay(
-                    PrimaryGradient()
-                )
-                .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
-        case (false, .light):
-            configuration.label
-                .foregroundColor(theme.lightTextColor)
-                .font(font)
-                .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
-                .background(theme.lightPrimaryColor.opacity(configuration.isPressed ? 0.7 : 1))
-                .clipShape(Circle())
-                .overlay(
-                    PrimaryGradient()
-                )
-                .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
-        case (true, .dark):
-            configuration.label
-                .foregroundColor(theme.darkToggleColor)
-                .font(font)
-                .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
-                .background(theme.darkPrimaryColor.opacity(configuration.isPressed ? 0.7 : 1))
-                .clipShape(Circle())
-                .overlay(
-                    PrimaryGradient()
-                )
-                .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
-        case (false, .dark):
-            configuration.label
-                .foregroundColor(theme.darkTextColor)
-                .font(font)
-                .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
-                .background(theme.darkPrimaryColor.opacity(configuration.isPressed ? 0.7 : 1))
-                .clipShape(Circle())
-                .overlay(
-                    PrimaryGradient()
-                )
-                .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
-        default:
-            configuration.label
-                .foregroundColor(theme.lightTextColor)
-                .font(font)
-                .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
-                .background(theme.lightPrimaryColor.opacity(configuration.isPressed ? 0.7 : 1))
-                .clipShape(Circle())
-                .overlay(
-                    PrimaryGradient()
-                )
-                .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
-        }
+        let foreground = isToggle
+            ? (colorScheme == .light ? theme.lightToggleColor : theme.darkToggleColor)
+            : theme.textColor(for: colorScheme)
+        configuration.label
+            .circleButtonBody(configuration: configuration,
+                              maxValue: maxValue,
+                              foreground: foreground,
+                              background: theme.primaryColor(for: colorScheme))
     }
 }
 
+/// ``CircleButtonStyle`` on the status background, whose label colour reflects a ``ThemeStatus``.
 public struct CircleStatusButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.theme) var theme
-    @Environment(\.body1) var font
-    
+
     public init(maxValue: CGFloat, status: ThemeStatus) {
         self.maxValue = maxValue
         self.status = status
     }
     var maxValue: CGFloat
     var status: ThemeStatus
-    
+
     public func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .circleButtonBody(configuration: configuration,
+                              maxValue: maxValue,
+                              foreground: theme.statusColor(for: status),
+                              background: theme.backgroundStatusColor)
+    }
+}
+
+// MARK: - Shared pieces
+
+extension Theme {
+    func textColor(for colorScheme: ColorScheme) -> Color {
+        colorScheme == .light ? lightTextColor : darkTextColor
+    }
+
+    func primaryColor(for colorScheme: ColorScheme) -> Color {
+        colorScheme == .light ? lightPrimaryColor : darkPrimaryColor
+    }
+
+    func statusColor(for status: ThemeStatus) -> Color {
         switch status {
-        case .initial:
-            configuration.label
-                .foregroundColor(theme.initialStatusColor)
-                .font(font)
-                .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
-                .background(theme.backgroundStatusColor.opacity(configuration.isPressed ? 0.7 : 1))
-                .clipShape(Circle())
-                .overlay(
-                    PrimaryGradient()
-                )
-                .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
-        case .progress:
-            configuration.label
-                .foregroundColor(theme.progressStatusColor)
-                .font(font)
-                .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
-                .background(theme.backgroundStatusColor.opacity(configuration.isPressed ? 0.7 : 1))
-                .clipShape(Circle())
-                .overlay(
-                    PrimaryGradient()
-                )
-                .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
-        case .accepted:
-            configuration.label
-                .foregroundColor(theme.acceptedStatusColor)
-                .font(font)
-                .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
-                .background(theme.backgroundStatusColor.opacity(configuration.isPressed ? 0.7 : 1))
-                .clipShape(Circle())
-                .overlay(
-                    PrimaryGradient()
-                )
-                .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
-        case .refused:
-            configuration.label
-                .foregroundColor(theme.refusedStatusColor)
-                .font(font)
-                .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
-                .background(theme.backgroundStatusColor.opacity(configuration.isPressed ? 0.7 : 1))
-                .clipShape(Circle())
-                .overlay(
-                    PrimaryGradient()
-                )
-                .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
+        case .initial: initialStatusColor
+        case .progress: progressStatusColor
+        case .accepted: acceptedStatusColor
+        case .refused: refusedStatusColor
         }
     }
 }
 
+private extension View {
+    /// The body shared by the three circle button styles: `body1` label, square frame,
+    /// circular background dimmed while pressed, gradient ring, press scale.
+    func circleButtonBody(configuration: ButtonStyleConfiguration,
+                          maxValue: CGFloat,
+                          foreground: Color,
+                          background: Color) -> some View {
+        self
+            .foregroundColor(foreground)
+            .lgFont(.body1)
+            .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
+            .background(background.opacity(configuration.isPressed ? 0.7 : 1))
+            .clipShape(Circle())
+            .overlay(PrimaryGradient())
+            .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
+    }
+}
+
+/// The hairline gradient ring around circle buttons, from the theme's gradient pair for
+/// the current colour scheme.
 struct PrimaryGradient: View {
     @Environment(\.theme) var theme
-    
+    @Environment(\.colorScheme) var colorScheme
+
     var body: some View {
         Capsule()
             .stroke(
                 LinearGradient(
                     gradient: Gradient(
-                        colors: [
-                            theme.darkGradient1Color,
-                            theme.darkGradient2Color
-                        ]
+                        colors: colorScheme == .light
+                            ? [theme.lightGradient1Color, theme.lightGradient2Color]
+                            : [theme.darkGradient1Color, theme.darkGradient2Color]
                     ),
                     startPoint: .top,
                     endPoint: .trailing
@@ -274,4 +226,3 @@ struct PrimaryGradient: View {
             )
     }
 }
-

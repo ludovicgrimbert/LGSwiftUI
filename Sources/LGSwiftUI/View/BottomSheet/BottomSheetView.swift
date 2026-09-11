@@ -9,9 +9,7 @@ import SwiftUI
 
 public struct BottomSheetView: View {
     @Environment(\.theme) var theme
-    @Environment(\.colorScheme) var colorScheme
-    @Environment(\.h5) var h5
-    @Environment(\.caption) var caption
+    @Environment(\.lgScaledSize) var size
 
     var title: String
     var imageName: String?
@@ -39,34 +37,25 @@ public struct BottomSheetView: View {
         self.cancel = cancel
     }
 
-    private var textColor: Color {
-        colorScheme == .light ? theme.lightTextColor : theme.darkTextColor
-    }
-
     public var body: some View {
         GeometryReader { proxy in
-            VStack(spacing: theme.smallValue) {
+            VStack(spacing: theme.spacing.m) {
                 if let imageName = imageName {
                     Image(imageName)
                         .renderingMode(.original)
                         .resizable()
                         .scaledToFit()
-                        .frame(
-                            width: theme.mediumValue,
-                            height: theme.mediumValue
-                        )
+                        .frame(width: size.m, height: size.m)
                 }
                 Text(title)
-                    .foregroundColor(textColor)
-                    .font(h5)
+                    .textStyle(.h5)
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
                     .frame(maxWidth: .infinity)
 
                 Text(description)
-                    .foregroundColor(textColor)
-                    .font(caption)
+                    .textStyle(.caption)
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)

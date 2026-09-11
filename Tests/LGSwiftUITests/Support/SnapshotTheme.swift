@@ -40,9 +40,7 @@ extension View {
     /// the primary background behind everything, and a forced colour scheme.
     func snapshotEnvironment(_ colorScheme: ColorScheme) -> some View {
         self
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .backgroundStyle(BackgroundPrimaryStyle())
-            .environment(\.theme, SnapshotTheme())
-            .environment(\.colorScheme, colorScheme)
+            .lgPrimaryBackground()
+            .lgTheme(SnapshotTheme(), colorScheme: colorScheme)
     }
 }

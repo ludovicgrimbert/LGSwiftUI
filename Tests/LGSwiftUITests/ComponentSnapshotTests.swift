@@ -29,33 +29,32 @@ struct ComponentSnapshotTests {
 
     // MARK: - Text
 
+    private static var allTextRoles: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            ForEach(TextRole.allCases, id: \.self) { role in
+                Text(role.rawValue.capitalized).textStyle(role)
+            }
+        }
+    }
+
     @Test("Text styles", arguments: schemes)
     func textStyles(scheme: ColorScheme) {
-        let view = VStack(alignment: .leading, spacing: 4) {
-            Text("H1").textStyle(H1Style())
-            Text("H2").textStyle(H2Style())
-            Text("H3").textStyle(H3Style())
-            Text("H4").textStyle(H4Style())
-            Text("H5").textStyle(H5Style())
-            Text("H6").textStyle(H6Style())
-            Text("Subtitle1").textStyle(Subtitle1Style())
-            Text("Subtitle2").textStyle(Subtitle2Style())
-            Text("Body1").textStyle(Body1Style())
-            Text("Body2").textStyle(Body2Style())
-            Text("Caption").textStyle(CaptionStyle())
-            Text("Caption2").textStyle(Caption2Style())
-            Text("Overline").textStyle(OverlineStyle())
-        }
-        .snapshotEnvironment(scheme)
-
+        let view = Self.allTextRoles.snapshotEnvironment(scheme)
         assertSnapshot(of: view, named: "TextStyles-\(Self.suffix(scheme))", size: CGSize(width: 320, height: 420))
+    }
+
+    @Test("Text styles scale with Dynamic Type")
+    func textStylesAccessibility() {
+        let view = Self.allTextRoles
+            .snapshotEnvironment(.dark)
+            .environment(\.dynamicTypeSize, .accessibility3)
+        assertSnapshot(of: view, named: "TextStyles-dark-accessibility3", size: CGSize(width: 480, height: 720))
     }
 
     // MARK: - Buttons
 
-    @Test("Button styles", arguments: schemes)
-    func buttonStyles(scheme: ColorScheme) {
-        let view = VStack(spacing: 12) {
+    private static var allButtons: some View {
+        VStack(spacing: 12) {
             Button("Simple") {}.buttonStyle(SimpleButtonStyle(maxValue: 200))
             Button("Simple leading") {}.buttonStyle(SimpleButtonStyle(maxValue: 200, textIsCenter: false))
             Button("Clear") {}.buttonStyle(ClearButtonStyle(maxValue: 200))
@@ -80,9 +79,32 @@ struct ComponentSnapshotTests {
                     .buttonStyle(CircleStatusButtonStyle(maxValue: 48, status: .refused))
             }
         }
-        .snapshotEnvironment(scheme)
+    }
 
+    @Test("Button styles", arguments: schemes)
+    func buttonStyles(scheme: ColorScheme) {
+        let view = Self.allButtons.snapshotEnvironment(scheme)
         assertSnapshot(of: view, named: "ButtonStyles-\(Self.suffix(scheme))", size: CGSize(width: 320, height: 440))
+    }
+
+    @Test("Button styles scale with Dynamic Type")
+    func buttonStylesAccessibility() {
+        let view = Self.allButtons
+            .snapshotEnvironment(.dark)
+            .environment(\.dynamicTypeSize, .accessibility3)
+        assertSnapshot(of: view, named: "ButtonStyles-dark-accessibility3", size: CGSize(width: 320, height: 640))
+    }
+
+    @Test("Neumorphic button", arguments: schemes)
+    func neumorphicButton(scheme: ColorScheme) {
+        let view = VStack(spacing: 24) {
+            Button("Neumorphic") {}.buttonStyle(NeumorphicButtonStyle(width: 200))
+            Button("Raised") {}.buttonStyle(NeumorphicButtonStyle(effect: .highShadow, width: 200, role: .body1))
+            Button { } label: { Image(systemName: "chevron.left") }
+                .buttonStyle(NeumorphicButtonStyle(style: .circle, width: 48))
+        }
+        .snapshotEnvironment(scheme)
+        assertSnapshot(of: view, named: "NeumorphicButton-\(Self.suffix(scheme))", size: CGSize(width: 280, height: 240))
     }
 
     // MARK: - Neumorphism
@@ -96,9 +118,9 @@ struct ComponentSnapshotTests {
         let view = VStack(spacing: 32) {
             ForEach(Array(styles.enumerated()), id: \.offset) { _, style in
                 HStack(spacing: 32) {
-                    NeumorphismView(style: style, level: .high, type: .shadow, width: 72, height: 72, color: fill)
-                    NeumorphismView(style: style, level: .high, type: .deep, width: 72, height: 72, color: fill)
-                    NeumorphismView(style: style, level: .low, type: .shadow, width: 72, height: 72, color: fill)
+                    NeumorphismView(style: style, effect: .highShadow, width: 72, height: 72, color: fill)
+                    NeumorphismView(style: style, effect: .highDeep, width: 72, height: 72, color: fill)
+                    NeumorphismView(style: style, effect: .lowShadow, width: 72, height: 72, color: fill)
                 }
             }
         }
@@ -177,13 +199,12 @@ struct ComponentSnapshotTests {
     @Test("Background styles", arguments: schemes)
     func backgroundStyles(scheme: ColorScheme) {
         let view = HStack(spacing: 0) {
-            Text("Primary").textStyle(Body1Style()).frame(maxWidth: .infinity, maxHeight: .infinity)
-                .backgroundStyle(BackgroundPrimaryStyle())
-            Text("Secondary").textStyle(Body1Style()).frame(maxWidth: .infinity, maxHeight: .infinity)
-                .backgroundStyle(BackgroundSecondaryStyle())
+            Text("Primary").textStyle(.body1).frame(maxWidth: .infinity, maxHeight: .infinity)
+                .lgBackground(.primary)
+            Text("Secondary").textStyle(.body1).frame(maxWidth: .infinity, maxHeight: .infinity)
+                .lgBackground(.secondary)
         }
-        .environment(\.theme, SnapshotTheme())
-        .environment(\.colorScheme, scheme)
+        .lgTheme(SnapshotTheme(), colorScheme: scheme)
 
         assertSnapshot(of: view, named: "Backgrounds-\(Self.suffix(scheme))", size: CGSize(width: 240, height: 80))
     }
@@ -193,7 +214,7 @@ struct ComponentSnapshotTests {
         let view = ScrollableContainerView { _ in
             VStack(spacing: 8) {
                 ForEach(0..<4, id: \.self) { index in
-                    Text("Row \(index)").textStyle(Body1Style())
+                    Text("Row \(index)").textStyle(.body1)
                 }
             }
         }
