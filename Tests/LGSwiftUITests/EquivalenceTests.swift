@@ -182,6 +182,28 @@ struct EquivalenceTests {
         assertRendersIdentically(legacy, modern, size: CGSize(width: 220, height: 100))
     }
 
+    @Test("UserInputField(role:) == UserInputField(placeholderFont:textFont:) at the default size")
+    func roleInputFieldMatchesFontInputField() {
+        let legacy = UserInputField(placeholderColor: theme.darkTextColor,
+                                    placeholderFont: TextRole.h5.fixedFont,
+                                    textColor: theme.darkTextColor,
+                                    textFont: TextRole.h5.fixedFont,
+                                    placeholderLabel: "Search a station",
+                                    text: .constant("Châtelet"))
+            .padding()
+            .snapshotEnvironment(.dark)
+
+        let modern = UserInputField(placeholderColor: theme.darkTextColor,
+                                    textColor: theme.darkTextColor,
+                                    role: .h5,
+                                    placeholderLabel: "Search a station",
+                                    text: .constant("Châtelet"))
+            .padding()
+            .snapshotEnvironment(.dark)
+
+        assertRendersIdentically(legacy, modern, size: CGSize(width: 320, height: 100))
+    }
+
     // MARK: - Theme glue
 
     @Test(".lgTheme(_:colorScheme:) == .environment(\\.theme) + .environment(\\.colorScheme)", arguments: schemes)

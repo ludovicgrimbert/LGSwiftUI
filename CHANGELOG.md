@@ -7,8 +7,9 @@ and are called out below.
 ## [0.3.0] - 2026-09-11
 
 ### Added
-- **Semantic layout tokens**: `theme.spacing` (`xs/s/m/l/xl` = 8/16/24/32/48), `theme.size` (`s/m/l/xl` =
-  24/48/80/160) and `theme.radius` (`s/m` = 8/24) as `ThemeSpacing`/`ThemeSize`/`ThemeRadius` groups.
+- **Semantic layout tokens**: `theme.spacing` (`xs/s/m/l/xl` = 8/16/24/32/48), `theme.size`
+  (`xxs/xs/s/m/l/xl` = 8/16/24/48/80/160) and `theme.radius` (`s/m` = 8/24) as
+  `ThemeSpacing`/`ThemeSize`/`ThemeRadius` groups.
   Values are the historical ones; the flat `smallValue`/`smallMargin`/… tokens are now deprecated aliases
   derived from the groups, so an app that overrides `size` keeps both names consistent while migrating.
 - **Dynamic Type**: `TextRole` (`h1`…`overline`, with base size, weight and the system text style each
@@ -45,7 +46,9 @@ and are called out below.
   only overrides its `dark*` colours, gets a sensible appearance. Apps that override the colours they
   use (Pampuko, RemoteTV) are unaffected.
 - `DefaultTheme` no longer duplicates every token; it relies on the protocol defaults.
-- `UserInputField` uses `lgTextFieldStyle` internally (same rendering).
+- `UserInputField` gains an `init(placeholderColor:textColor:role:…)` whose fonts scale with Dynamic Type;
+  `placeholderFont`/`textFont` become optional (`nil` with the role initializer). It uses `lgTextFieldStyle`
+  internally (same rendering).
 - `BottomSheetView` uses `NeumorphicButtonStyle` and `lgPrimaryBackground()` internally, and
   `CustomIconLabelStyle` now picks its icon colour from the current colour scheme. Both used to hardcode
   the `dark*` side of the theme: identical in dark mode (the only mode the apps ship), fixed in light mode.

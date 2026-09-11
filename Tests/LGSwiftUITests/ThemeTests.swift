@@ -18,7 +18,7 @@ struct ThemeTokenTests {
     @Test("Default sizes are unchanged")
     func defaultSizes() {
         let theme = BareTheme()
-        #expect(theme.size == ThemeSize(s: 24, m: 48, l: 80, xl: 160))
+        #expect(theme.size == ThemeSize(xxs: 8, xs: 16, s: 24, m: 48, l: 80, xl: 160))
     }
 
     @Test("Default spacing is unchanged")

@@ -31,12 +31,22 @@ public struct ThemeSpacing: Sendable, Equatable {
 /// Read `\.lgScaledSize` from the environment instead of `theme.size` when the element
 /// should grow with the user's Dynamic Type setting (see ``ThemeSize/scaled(for:)``).
 public struct ThemeSize: Sendable, Equatable {
+    /// Dots, indicators (8).
+    public var xxs: CGFloat
+    /// Small glyphs (16).
+    public var xs: CGFloat
+    /// Icons (24).
     public var s: CGFloat
+    /// Control height, round buttons (48).
     public var m: CGFloat
+    /// Cards, logos (80).
     public var l: CGFloat
+    /// Hero elements (160).
     public var xl: CGFloat
 
-    public init(s: CGFloat = 24, m: CGFloat = 48, l: CGFloat = 80, xl: CGFloat = 160) {
+    public init(xxs: CGFloat = 8, xs: CGFloat = 16, s: CGFloat = 24, m: CGFloat = 48, l: CGFloat = 80, xl: CGFloat = 160) {
+        self.xxs = xxs
+        self.xs = xs
         self.s = s
         self.m = m
         self.l = l
