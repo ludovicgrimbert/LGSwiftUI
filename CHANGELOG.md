@@ -4,7 +4,7 @@ All notable changes to this package. The format follows [Keep a Changelog](https
 the package uses [SemVer](https://semver.org) — while on `0.x`, minor versions may break source compatibility
 and are called out below.
 
-## [Unreleased]
+## [0.4.0] - 2026-09-11
 
 ### Added
 - `LGSwiftUI.xcworkspace` (package + example) and `Example/LGSwiftUIExample`, an xcodegen-generated
