@@ -10,8 +10,9 @@ import SwiftUI
 /// A text button on a neumorphic shape — the pattern previously hand-built as
 /// `ZStack { NeumorphismView(...); Text(title) }` in `BottomSheetView` and in the apps.
 ///
-/// Defaults follow the theme: rounded rectangle with `smallValue` radius, `lowShadow`
-/// effect, `mediumValue` height, primary background colour, text colour and `h5` font.
+/// Defaults follow the theme: rounded rectangle with `radius.m`, `lowShadow` effect,
+/// `size.m` height (scaled with Dynamic Type), primary background colour, text colour and
+/// the `h5` role.
 ///
 /// ```swift
 /// Button("Delete", action: delete)
@@ -20,40 +21,40 @@ import SwiftUI
 public struct NeumorphicButtonStyle: ButtonStyle {
     @Environment(\.theme) private var theme
     @Environment(\.colorScheme) private var colorScheme
-    @Environment(\.h5) private var h5
+    @Environment(\.lgScaledSize) private var size
 
     var style: NeumorphismStyle?
     var effect: NeumorphismEffect
     var width: CGFloat?
     var height: CGFloat?
-    var font: Font?
+    var role: TextRole
 
     /// - Parameters:
-    ///   - style: shape of the button; defaults to `.roundedRectangle(cornerRadius: theme.smallValue)`.
+    ///   - style: shape of the button; defaults to `.roundedRectangle(cornerRadius: theme.radius.m)`.
     ///   - effect: neumorphic treatment; defaults to `.lowShadow`.
     ///   - width: fixed width; `nil` sizes to the label.
-    ///   - height: fixed height; `nil` defaults to `theme.mediumValue`.
-    ///   - font: label font; `nil` defaults to the environment's `h5`.
+    ///   - height: fixed height; `nil` defaults to the scaled `theme.size.m`.
+    ///   - role: label typography; defaults to `.h5`.
     public nonisolated init(style: NeumorphismStyle? = nil,
                             effect: NeumorphismEffect = .lowShadow,
                             width: CGFloat? = nil,
                             height: CGFloat? = nil,
-                            font: Font? = nil) {
+                            role: TextRole = .h5) {
         self.style = style
         self.effect = effect
         self.width = width
         self.height = height
-        self.font = font
+        self.role = role
     }
 
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .foregroundColor(colorScheme == .light ? theme.lightTextColor : theme.darkTextColor)
-            .font(font ?? h5)
-            .neumorphic(style ?? .roundedRectangle(cornerRadius: theme.smallValue),
+            .foregroundColor(theme.textColor(for: colorScheme))
+            .lgFont(role)
+            .neumorphic(style ?? .roundedRectangle(cornerRadius: theme.radius.m),
                         effect: effect,
                         width: width,
-                        height: height ?? theme.mediumValue)
+                        height: height ?? size.m)
             .opacity(configuration.isPressed ? 0.7 : 1)
     }
 }

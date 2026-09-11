@@ -3,8 +3,8 @@
 //  LGSwiftUITests
 //
 //  Proves that the new composable APIs render pixel-for-pixel like the hand-written
-//  compositions they replace in the apps. No reference file involved: both sides are
-//  rendered on the spot and compared.
+//  compositions (and the deprecated APIs) they replace in the apps. No reference file
+//  involved: both sides are rendered on the spot and compared.
 //
 
 import SwiftUI
@@ -27,6 +27,8 @@ struct EquivalenceTests {
         scheme == .dark ? theme.darkTextColor : theme.lightTextColor
     }
 
+    // MARK: - Neumorphism
+
     @Test(".neumorphic(width:height:) == ZStack { NeumorphismView; content }", arguments: schemes)
     func neumorphicModifierWithExplicitSize(scheme: ColorScheme) {
         let legacy = ZStack {
@@ -34,11 +36,11 @@ struct EquivalenceTests {
                             level: .high, type: .shadow,
                             width: 160, height: 80,
                             color: fill(scheme))
-            Text("Back").textStyle(H5Style())
+            Text("Back").textStyle(.h5)
         }
         .snapshotEnvironment(scheme)
 
-        let modern = Text("Back").textStyle(H5Style())
+        let modern = Text("Back").textStyle(.h5)
             .neumorphic(.roundedRectangle(cornerRadius: 24), effect: .highShadow, width: 160, height: 80)
             .snapshotEnvironment(scheme)
 
@@ -79,13 +81,13 @@ struct EquivalenceTests {
         // The composition BottomSheetView and Pampuko's NotificationSheetView used to write.
         let legacy = Button(action: {}) {
             ZStack {
-                NeumorphismView(style: .roundedRectangle(cornerRadius: theme.smallValue),
+                NeumorphismView(style: .roundedRectangle(cornerRadius: 24),
                                 level: .low, type: .shadow,
-                                width: 240, height: theme.mediumValue,
+                                width: 240, height: 48,
                                 color: theme.darkPrimaryBackgroundColor)
                 Text("Delete")
                     .foregroundColor(theme.darkTextColor)
-                    .font(.system(size: 24, weight: .bold)) // the default `h5`
+                    .font(.system(size: 24, weight: .bold)) // the historical `h5`
             }
         }
         .snapshotEnvironment(.dark)
@@ -101,14 +103,72 @@ struct EquivalenceTests {
                                  precision: 0.995, channelTolerance: 8)
     }
 
+    // MARK: - Typography
+
+    @available(*, deprecated) // compares against the deprecated per-role modifiers on purpose
+    @Test(".textStyle(role) == the deprecated XStyle() modifiers", arguments: schemes)
+    func roleTextStyleMatchesLegacyModifiers(scheme: ColorScheme) {
+        let legacy = VStack(alignment: .leading, spacing: 4) {
+            Text("H1").textStyle(H1Style())
+            Text("H3").textStyle(H3Style())
+            Text("H5").textStyle(H5Style())
+            Text("Subtitle2").textStyle(Subtitle2Style())
+            Text("Body1").textStyle(Body1Style())
+            Text("Caption").textStyle(CaptionStyle())
+            Text("Overline").textStyle(OverlineStyle())
+        }
+        .snapshotEnvironment(scheme)
+
+        let modern = VStack(alignment: .leading, spacing: 4) {
+            Text("H1").textStyle(.h1)
+            Text("H3").textStyle(.h3)
+            Text("H5").textStyle(.h5)
+            Text("Subtitle2").textStyle(.subtitle2)
+            Text("Body1").textStyle(.body1)
+            Text("Caption").textStyle(.caption)
+            Text("Overline").textStyle(.overline)
+        }
+        .snapshotEnvironment(scheme)
+
+        assertRendersIdentically(legacy, modern, size: CGSize(width: 320, height: 320))
+    }
+
+    @available(*, deprecated) // compares against the deprecated environment fonts on purpose
+    @Test(".lgFont(role) == .font(environment font) at the default Dynamic Type size")
+    func roleFontMatchesEnvironmentFont() {
+        struct Legacy: View {
+            @Environment(\.caption) var caption
+            @Environment(\.h5) var h5
+            @Environment(\.subtitle2) var subtitle2
+            var body: some View {
+                VStack(alignment: .leading) {
+                    Text("Caption").font(caption).foregroundColor(.white)
+                    Text("H5").font(h5).foregroundColor(.white)
+                    Text("Subtitle2").font(subtitle2).foregroundColor(.white)
+                }
+            }
+        }
+        let legacy = Legacy().snapshotEnvironment(.dark)
+
+        let modern = VStack(alignment: .leading) {
+            Text("Caption").lgFont(.caption).foregroundColor(.white)
+            Text("H5").lgFont(.h5).foregroundColor(.white)
+            Text("Subtitle2").lgFont(.subtitle2).foregroundColor(.white)
+        }
+        .snapshotEnvironment(.dark)
+
+        assertRendersIdentically(legacy, modern, size: CGSize(width: 240, height: 160))
+    }
+
+    // MARK: - Theme glue
+
     @Test(".lgTheme(_:colorScheme:) == .environment(\\.theme) + .environment(\\.colorScheme)", arguments: schemes)
     func lgThemeMatchesEnvironmentInjection(scheme: ColorScheme) {
         let content = VStack {
-            Text("Title").textStyle(H5Style())
+            Text("Title").textStyle(.h5)
             Button("Go") {}.buttonStyle(SimpleButtonStyle(maxValue: 160))
         }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .backgroundStyle(BackgroundPrimaryStyle())
+        .lgPrimaryBackground()
 
         let legacy = content
             .environment(\.theme, SnapshotTheme())
@@ -120,19 +180,28 @@ struct EquivalenceTests {
         assertRendersIdentically(legacy, modern, size: CGSize(width: 240, height: 160))
     }
 
-    @Test(".lgPrimaryBackground() == frame(max) + backgroundStyle(primary)", arguments: schemes)
-    func lgPrimaryBackgroundMatchesComposition(scheme: ColorScheme) {
-        let legacy = Text("Screen").textStyle(Body1Style())
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .backgroundStyle(BackgroundPrimaryStyle())
-            .environment(\.theme, SnapshotTheme())
-            .environment(\.colorScheme, scheme)
+    @available(*, deprecated) // compares against the deprecated backgroundStyle alias on purpose
+    @Test(".lgBackground / .lgPrimaryBackground == frame(max) + backgroundStyle(...)", arguments: schemes)
+    func lgBackgroundsMatchDeprecatedComposition(scheme: ColorScheme) {
+        let legacy = HStack(spacing: 0) {
+            Text("Screen").textStyle(.body1)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .backgroundStyle(BackgroundPrimaryStyle())
+            Text("Card").textStyle(.body1)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .backgroundStyle(BackgroundSecondaryStyle())
+        }
+        .lgTheme(SnapshotTheme(), colorScheme: scheme)
 
-        let modern = Text("Screen").textStyle(Body1Style())
-            .lgPrimaryBackground()
-            .environment(\.theme, SnapshotTheme())
-            .environment(\.colorScheme, scheme)
+        let modern = HStack(spacing: 0) {
+            Text("Screen").textStyle(.body1)
+                .lgPrimaryBackground()
+            Text("Card").textStyle(.body1)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .lgBackground(.secondary)
+        }
+        .lgTheme(SnapshotTheme(), colorScheme: scheme)
 
-        assertRendersIdentically(legacy, modern, size: CGSize(width: 200, height: 120))
+        assertRendersIdentically(legacy, modern, size: CGSize(width: 240, height: 120))
     }
 }

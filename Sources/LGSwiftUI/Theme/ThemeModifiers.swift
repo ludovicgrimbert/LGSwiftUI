@@ -32,7 +32,7 @@ public extension View {
     func lgPrimaryBackground() -> some View {
         self
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .backgroundStyle(BackgroundPrimaryStyle())
+            .lgBackground(.primary)
     }
 }
 
