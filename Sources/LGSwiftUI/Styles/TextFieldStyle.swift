@@ -7,16 +7,18 @@
 
 import SwiftUI
 
-/// Styles a `TextField`: text colour and font, tint, default padding and an optional
-/// rounded stroke.
+/// Styles a `TextField`: text colour, optional fixed font, tint, default padding and an
+/// optional rounded stroke.
 ///
 /// ```swift
 /// TextField("Search", text: $query)
-///     .lgTextFieldStyle(color: theme.darkTextColor, font: body1)
+///     .lgTextFieldStyle(color: theme.darkTextColor, role: .caption)   // scales with Dynamic Type
 /// ```
 public struct LGTextFieldModifier: ViewModifier {
     var color: Color
-    var font: Font
+    /// `nil` leaves the font untouched (used by the `role:` variant, which applies a scaled
+    /// font before this modifier).
+    var font: Font?
     var cornerRadius: CGFloat
     var strokeColor: Color
     var lineWidth: CGFloat
@@ -24,7 +26,7 @@ public struct LGTextFieldModifier: ViewModifier {
     // `ViewModifier` is main-actor isolated; this initializer only stores values, so it
     // is safe to call from any context (e.g. the deprecated `CustomTextFieldStyle.init`).
     public nonisolated init(color: Color,
-                            font: Font,
+                            font: Font?,
                             cornerRadius: CGFloat = 0,
                             strokeColor: Color = .clear,
                             lineWidth: CGFloat = 1) {
@@ -49,8 +51,8 @@ public struct LGTextFieldModifier: ViewModifier {
 }
 
 public extension View {
-    /// Applies ``LGTextFieldModifier``. Meant for `TextField`s; being a plain view
-    /// modifier it does not rely on `TextFieldStyle`'s private `_body` extension point.
+    /// Applies ``LGTextFieldModifier`` with a fixed font. Meant for `TextField`s; being a
+    /// plain view modifier it does not rely on `TextFieldStyle`'s private `_body` extension point.
     func lgTextFieldStyle(color: Color,
                           font: Font,
                           cornerRadius: CGFloat = 0,
@@ -62,12 +64,27 @@ public extension View {
                                      strokeColor: strokeColor,
                                      lineWidth: lineWidth))
     }
+
+    /// Applies ``LGTextFieldModifier`` with a ``TextRole`` font that scales with Dynamic Type.
+    func lgTextFieldStyle(color: Color,
+                          role: TextRole,
+                          cornerRadius: CGFloat = 0,
+                          strokeColor: Color = .clear,
+                          lineWidth: CGFloat = 1) -> some View {
+        self
+            .lgFont(role)
+            .modifier(LGTextFieldModifier(color: color,
+                                          font: nil,
+                                          cornerRadius: cornerRadius,
+                                          strokeColor: strokeColor,
+                                          lineWidth: lineWidth))
+    }
 }
 
 /// Kept for source compatibility. `TextFieldStyle` has no public customisation point:
 /// conforming to it requires implementing the underscored `_body(configuration:)`,
 /// which is not API and may break with any SDK. Prefer `View.lgTextFieldStyle(...)`.
-@available(*, deprecated, message: "Use .lgTextFieldStyle(color:font:cornerRadius:strokeColor:lineWidth:) instead")
+@available(*, deprecated, message: "Use .lgTextFieldStyle(color:role:cornerRadius:strokeColor:lineWidth:) instead")
 public struct CustomTextFieldStyle: TextFieldStyle {
     var modifier: LGTextFieldModifier
 

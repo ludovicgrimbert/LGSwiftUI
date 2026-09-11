@@ -160,6 +160,28 @@ struct EquivalenceTests {
         assertRendersIdentically(legacy, modern, size: CGSize(width: 240, height: 160))
     }
 
+    @available(*, deprecated) // compares against the deprecated CustomTextFieldStyle on purpose
+    @Test(".lgTextFieldStyle(role:) == .textFieldStyle(CustomTextFieldStyle(font:)) at the default size")
+    func roleTextFieldStyleMatchesLegacy() {
+        let legacy = TextField("Keyboard or vocal", text: .constant("Netflix"))
+            .textFieldStyle(CustomTextFieldStyle(color: theme.darkTextColor,
+                                                 font: TextRole.caption.fixedFont,
+                                                 cornerRadius: 24,
+                                                 strokeColor: theme.darkToggleColor))
+            .frame(width: 160, height: 48)
+            .snapshotEnvironment(.dark)
+
+        let modern = TextField("Keyboard or vocal", text: .constant("Netflix"))
+            .lgTextFieldStyle(color: theme.darkTextColor,
+                              role: .caption,
+                              cornerRadius: 24,
+                              strokeColor: theme.darkToggleColor)
+            .frame(width: 160, height: 48)
+            .snapshotEnvironment(.dark)
+
+        assertRendersIdentically(legacy, modern, size: CGSize(width: 220, height: 100))
+    }
+
     // MARK: - Theme glue
 
     @Test(".lgTheme(_:colorScheme:) == .environment(\\.theme) + .environment(\\.colorScheme)", arguments: schemes)
