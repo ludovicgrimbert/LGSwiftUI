@@ -35,8 +35,8 @@ and are called out below.
 - Snapshot tests (`ImageRenderer`-based, no external dependency) covering every public component in both
   colour schemes, equivalence tests proving new APIs render like the compositions they replace, plus unit
   tests locking the numeric tokens and the `Color` helpers.
-- `View.lgTextFieldStyle(color:font:cornerRadius:strokeColor:lineWidth:)` and `LGTextFieldModifier`,
-  a public-API replacement for `CustomTextFieldStyle`.
+- `View.lgTextFieldStyle(color:font:…)` and `lgTextFieldStyle(color:role:…)` (Dynamic Type-scaled font) with
+  `LGTextFieldModifier`, a public-API replacement for `CustomTextFieldStyle`.
 - `README.md` documenting the theme, the `Color(red:green:blue:)` 0-255 gotcha, and the test workflow.
 
 ### Changed
