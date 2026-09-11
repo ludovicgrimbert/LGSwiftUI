@@ -88,6 +88,53 @@ func assertSnapshot(
     }
 }
 
+/// Renders two views at the same size and fails unless they are pixel-identical (within
+/// `channelTolerance`). Used to prove a new API reproduces an existing composition.
+@MainActor
+func assertRendersIdentically(
+    _ expected: some View,
+    _ actual: some View,
+    size: CGSize,
+    precision: Double = 1.0,
+    channelTolerance: UInt8 = 2,
+    fileID: String = #fileID,
+    filePath: String = #filePath,
+    line: Int = #line,
+    column: Int = #column
+) {
+    let sourceLocation = SourceLocation(fileID: fileID, filePath: filePath, line: line, column: column)
+
+    func render(_ view: some View) -> UIImage? {
+        let renderer = ImageRenderer(content: view.frame(width: size.width, height: size.height))
+        renderer.scale = 2
+        renderer.proposedSize = ProposedViewSize(size)
+        return renderer.uiImage
+    }
+
+    guard let expectedImage = render(expected), let actualImage = render(actual) else {
+        Issue.record("Could not render one of the two views", sourceLocation: sourceLocation)
+        return
+    }
+
+    switch compare(expectedImage, actualImage, channelTolerance: channelTolerance) {
+    case .sizeMismatch(let e, let a):
+        Issue.record("Rendered sizes differ: \(e) vs \(a)", sourceLocation: sourceLocation)
+    case .matched(let fraction):
+        if fraction < precision {
+            let failures = URL(fileURLWithPath: filePath).deletingLastPathComponent()
+                .appendingPathComponent("__Snapshots__/.failures", isDirectory: true)
+            let stamp = "\(fileID.split(separator: "/").last ?? "").L\(line)"
+            if let png = expectedImage.pngData() { writeFailure(png, name: "\(stamp).expected", in: failures) }
+            if let png = actualImage.pngData() { writeFailure(png, name: "\(stamp).actual", in: failures) }
+            let percent = String(format: "%.3f", fraction * 100)
+            Issue.record(
+                "Views render differently: \(percent)% of pixels match (required \(precision * 100)%). Both images saved in \(failures.path).",
+                sourceLocation: sourceLocation
+            )
+        }
+    }
+}
+
 // MARK: - Comparison
 
 private enum ComparisonOutcome {
