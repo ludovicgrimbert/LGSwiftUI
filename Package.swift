@@ -29,7 +29,10 @@ let package = Package(
             dependencies: []),
         .testTarget(
             name: "LGSwiftUITests",
-            dependencies: ["LGSwiftUI"]),
+            dependencies: ["LGSwiftUI"],
+            // Reference PNGs for the ImageRenderer-based snapshot tests. They are read
+            // from the source tree via #filePath, not from the test bundle.
+            exclude: ["__Snapshots__"]),
     ],
     swiftLanguageModes: [.version("6")]
 
