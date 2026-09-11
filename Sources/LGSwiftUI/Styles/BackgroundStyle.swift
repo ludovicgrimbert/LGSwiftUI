@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  BackgroundStyle.swift
+//  LGSwiftUI
 //
 //  Created by Ludovic Grimbert on 24/03/2024.
 //
