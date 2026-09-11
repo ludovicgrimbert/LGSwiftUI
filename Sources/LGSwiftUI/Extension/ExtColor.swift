@@ -16,6 +16,15 @@ public extension Color {
     }
 }
 
+/// Shadows SwiftUI's native `Color(red:green:blue:opacity:)` — same parameter labels and
+/// types, so this overload wins whenever `LGSwiftUI` is imported alongside `SwiftUI`.
+/// Unlike the native initializer (which expects 0...1), this one takes 0-255 components,
+/// matching how colors are usually handed off from design tools (Figma, hex codes, etc.).
+///
+/// This has already caused real bugs: two independent code audits of Pampuko, and a real
+/// fix-of-a-non-bug in RemoteTV, all assumed the native 0...1 semantics and treated correct
+/// 0-255 theme values as a saturation bug. If you're calling `Color(red:green:blue:)` in a
+/// file that imports `LGSwiftUI`, you are calling *this* initializer, not SwiftUI's.
 public extension Color {
     init(red: Double, green: Double, blue: Double, opacity: Double = 1.0) {
         let red = red / 255.0
