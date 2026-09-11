@@ -44,7 +44,7 @@ alerts and keyboards to follow too.
 | Group | Tokens | Use for |
 |---|---|---|
 | `theme.spacing` | `xs` 8 · `s` 16 · `m` 24 · `l` 32 · `xl` 48 | padding, stack spacing, gaps |
-| `theme.size` | `s` 24 · `m` 48 · `l` 80 · `xl` 160 | icon sizes, control heights, fixed widths |
+| `theme.size` | `xxs` 8 · `xs` 16 · `s` 24 · `m` 48 · `l` 80 · `xl` 160 | dots, glyphs, icons, control heights, cards, hero elements |
 | `theme.radius` | `s` 8 · `m` 24 | corner radii |
 
 For dimensions that wrap text, read `@Environment(\.lgScaledSize)` instead of

@@ -40,7 +40,7 @@ public extension ThemeSize {
     /// Returns `self` unchanged at the default `.large` setting.
     func scaled(for dynamicTypeSize: DynamicTypeSize) -> ThemeSize {
         let factor = dynamicTypeSize.lgScaleFactor
-        return ThemeSize(s: s * factor, m: m * factor, l: l * factor, xl: xl * factor)
+        return ThemeSize(xxs: xxs * factor, xs: xs * factor, s: s * factor, m: m * factor, l: l * factor, xl: xl * factor)
     }
 }
 
