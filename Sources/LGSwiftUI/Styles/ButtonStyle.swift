@@ -109,9 +109,14 @@ public struct RectangleButtonStyle: ButtonStyle {
 }
 
 /// Round icon button on the primary colour with a gradient ring.
+///
+/// `maxValue` is the diameter at the default Dynamic Type setting; like the label inside
+/// (`.lgFont(.body1)`), it scales with the user's text size so the icon never crowds the
+/// circle at larger accessibility sizes.
 public struct CircleButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.theme) var theme
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
 
     public init(maxValue: CGFloat) {
         self.maxValue = maxValue
@@ -121,7 +126,7 @@ public struct CircleButtonStyle: ButtonStyle {
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .circleButtonBody(configuration: configuration,
-                              maxValue: maxValue,
+                              maxValue: maxValue * dynamicTypeSize.lgScaleFactor,
                               foreground: theme.textColor(for: colorScheme),
                               background: theme.primaryColor(for: colorScheme))
     }
@@ -131,6 +136,7 @@ public struct CircleButtonStyle: ButtonStyle {
 public struct CircleToggleButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.theme) var theme
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
 
     public init(maxValue: CGFloat, isToggle: Bool) {
         self.maxValue = maxValue
@@ -145,7 +151,7 @@ public struct CircleToggleButtonStyle: ButtonStyle {
             : theme.textColor(for: colorScheme)
         configuration.label
             .circleButtonBody(configuration: configuration,
-                              maxValue: maxValue,
+                              maxValue: maxValue * dynamicTypeSize.lgScaleFactor,
                               foreground: foreground,
                               background: theme.primaryColor(for: colorScheme))
     }
@@ -155,6 +161,7 @@ public struct CircleToggleButtonStyle: ButtonStyle {
 public struct CircleStatusButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.theme) var theme
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
 
     public init(maxValue: CGFloat, status: ThemeStatus) {
         self.maxValue = maxValue
@@ -166,7 +173,7 @@ public struct CircleStatusButtonStyle: ButtonStyle {
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .circleButtonBody(configuration: configuration,
-                              maxValue: maxValue,
+                              maxValue: maxValue * dynamicTypeSize.lgScaleFactor,
                               foreground: theme.statusColor(for: status),
                               background: theme.backgroundStatusColor)
     }

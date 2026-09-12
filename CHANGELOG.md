@@ -4,6 +4,25 @@ All notable changes to this package. The format follows [Keep a Changelog](https
 the package uses [SemVer](https://semver.org) — while on `0.x`, minor versions may break source compatibility
 and are called out below.
 
+## [0.4.2] - 2026-09-12
+
+### Fixed
+- `CircleButtonStyle`, `CircleToggleButtonStyle` and `CircleStatusButtonStyle` didn't scale
+  their own diameter with Dynamic Type, even though their label already did (`.lgFont(.body1)`)
+  — the file's own doc comment claimed otherwise. At larger accessibility text sizes the icon
+  grew while the circle stayed fixed, crowding it (barely any margin left, most visibly top and
+  bottom) — spotted on the example gallery's round buttons. `maxValue` is now multiplied by
+  `dynamicTypeSize.lgScaleFactor`, same curve the label's font already follows, so the
+  icon-to-circle margin stays constant at every text size. No change at the default setting
+  (factor is 1); RemoteTV and Pampuko use these styles but only at the default text size today,
+  so unaffected in practice, and get the fix automatically once they update.
+
+### Changed
+- `ExampleTheme`'s light side is now Pampuko's actual `MainTheme` palette (mid-tone
+  lavender-grey), and the example gallery defaults to Light instead of following the device.
+  The Neumorphism screen's grid used the same colour as its own dark background — fill ≈
+  background, only the drop shadows showed, and against near-black they barely read.
+
 ## [0.4.1] - 2026-09-12
 
 ### Fixed
