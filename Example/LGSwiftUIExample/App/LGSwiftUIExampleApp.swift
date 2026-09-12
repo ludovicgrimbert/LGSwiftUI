@@ -31,8 +31,11 @@ struct LGSwiftUIExampleApp: App {
 @Observable
 @MainActor
 final class DemoSettings {
-    /// `nil` follows the device.
-    var colorScheme: ColorScheme?
+    /// Defaults to Light: `ExampleTheme`'s light side is Pampuko's real palette, picked
+    /// because it demonstrates the neumorphic shapes correctly (see `ExampleTheme`); `nil`
+    /// would follow the device and could open the gallery in Dark, which used to make the
+    /// Neumorphism screen unreadable. `nil` still follows the device if chosen from the menu.
+    var colorScheme: ColorScheme? = .light
     var dynamicTypeSize: DynamicTypeSize = .large
 }
 

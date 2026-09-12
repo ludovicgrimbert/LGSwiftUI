@@ -4,7 +4,43 @@ All notable changes to this package. The format follows [Keep a Changelog](https
 the package uses [SemVer](https://semver.org) — while on `0.x`, minor versions may break source compatibility
 and are called out below.
 
-## [Unreleased]
+## [0.4.2] - 2026-09-12
+
+### Fixed
+- `CircleButtonStyle`, `CircleToggleButtonStyle` and `CircleStatusButtonStyle` could render as a
+  flattened pill instead of a circle: their body sized itself with `.frame(maxWidth:maxHeight:)`,
+  which only *caps* each axis rather than forcing a square, so the actually-resolved width and
+  height could differ depending on the surrounding layout (reproduced with all of ButtonsScreen's
+  sections stacked together; an isolated row didn't show it) — screenshotted by Ludovic on the
+  example gallery's round buttons. Now uses an exact `.frame(width:height:)`, which always
+  resolves to precisely that size regardless of context. No change at the default setting on
+  the contexts already covered by the library's own snapshots (only the pixel-identical
+  accessibility3 reference needed re-recording); RemoteTV and Pampuko get the fix once they
+  update, whatever context they use these styles in.
+- `CircleButtonStyle`, `CircleToggleButtonStyle` and `CircleStatusButtonStyle` also didn't scale
+  their own diameter with Dynamic Type, even though their label already did (`.lgFont(.body1)`)
+  — the file's own doc comment claimed otherwise. At larger accessibility text sizes the icon
+  grew while the circle stayed fixed, crowding it (barely any margin left, most visibly top and
+  bottom). `maxValue` is now multiplied by `dynamicTypeSize.lgScaleFactor`, same curve the
+  label's font already follows, so the icon-to-circle margin stays constant at every text size.
+
+### Changed
+- `ExampleTheme`'s light side is now Pampuko's actual `MainTheme` palette (mid-tone
+  lavender-grey), and the example gallery defaults to Light instead of following the device.
+  The Neumorphism screen's grid used the same colour as its own dark background — fill ≈
+  background, only the drop shadows showed, and against near-black they barely read.
+
+## [0.4.1] - 2026-09-12
+
+### Fixed
+- `PrimaryButtonStyle`'s border rendered as 4 disconnected segments (2 short horizontal ones
+  poking past the capsule's silhouette, 2 barely-visible vertical slivers) instead of
+  following the capsule outline — spotted in the example gallery. `.border(_:width:)` stroked
+  a plain rectangle *before* `.clipShape(RoundedRectangle)` cut it down to a capsule, chopping
+  the rectangle's corners instead of the stroke following the curve. Now clips and strokes the
+  same shape. Neither RemoteTV nor Pampuko use this style, so they are unaffected.
+
+## [0.4.0] - 2026-09-11
 
 ### Added
 - `LGSwiftUI.xcworkspace` (package + example) and `Example/LGSwiftUIExample`, an xcodegen-generated

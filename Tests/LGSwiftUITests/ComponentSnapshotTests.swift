@@ -92,7 +92,10 @@ struct ComponentSnapshotTests {
         let view = Self.allButtons
             .snapshotEnvironment(.dark)
             .environment(\.dynamicTypeSize, .accessibility3)
-        assertSnapshot(of: view, named: "ButtonStyles-dark-accessibility3", size: CGSize(width: 320, height: 640))
+        // Wider than the default-size canvas: the circle button styles now scale their own
+        // diameter with Dynamic Type (see ButtonStyle.swift), so the round-button row is
+        // considerably wider at accessibility3 — a fixed 320pt canvas clipped it.
+        assertSnapshot(of: view, named: "ButtonStyles-dark-accessibility3", size: CGSize(width: 480, height: 640))
     }
 
     @Test("Neumorphic button", arguments: schemes)

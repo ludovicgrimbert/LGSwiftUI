@@ -68,13 +68,20 @@ public struct PrimaryButtonStyle: ButtonStyle {
     var maxValue: CGFloat
 
     public func makeBody(configuration: Configuration) -> some View {
-        configuration.label
+        // `.border(_:width:)` strokes a plain rectangle, drawn *before* the
+        // `.clipShape(RoundedRectangle)` below cuts the view down to a capsule — so the
+        // rectangle's corners get chopped off instead of the stroke following the capsule,
+        // leaving 4 disconnected border segments (2 short horizontal ones poking past the
+        // capsule's silhouette, 2 barely-visible vertical slivers). Stroking the same shape
+        // used to clip fixes it: the border then follows the capsule exactly.
+        let shape = RoundedRectangle(cornerRadius: size.m / 2)
+        return configuration.label
             .foregroundColor(theme.textColor(for: colorScheme))
             .lgFont(.body1)
             .frame(maxWidth: maxValue, maxHeight: size.m, alignment: .center)
-            .border(theme.textColor(for: colorScheme), width: 0.5)
             .background(theme.primaryColor(for: colorScheme).opacity(configuration.isPressed ? 0.7 : 1))
-            .clipShape(RoundedRectangle(cornerRadius: size.m / 2))
+            .clipShape(shape)
+            .overlay(shape.stroke(theme.textColor(for: colorScheme), lineWidth: 0.5))
             .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
     }
 }
@@ -102,9 +109,14 @@ public struct RectangleButtonStyle: ButtonStyle {
 }
 
 /// Round icon button on the primary colour with a gradient ring.
+///
+/// `maxValue` is the diameter at the default Dynamic Type setting; like the label inside
+/// (`.lgFont(.body1)`), it scales with the user's text size so the icon never crowds the
+/// circle at larger accessibility sizes.
 public struct CircleButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.theme) var theme
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
 
     public init(maxValue: CGFloat) {
         self.maxValue = maxValue
@@ -114,7 +126,7 @@ public struct CircleButtonStyle: ButtonStyle {
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .circleButtonBody(configuration: configuration,
-                              maxValue: maxValue,
+                              maxValue: maxValue * dynamicTypeSize.lgScaleFactor,
                               foreground: theme.textColor(for: colorScheme),
                               background: theme.primaryColor(for: colorScheme))
     }
@@ -124,6 +136,7 @@ public struct CircleButtonStyle: ButtonStyle {
 public struct CircleToggleButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.theme) var theme
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
 
     public init(maxValue: CGFloat, isToggle: Bool) {
         self.maxValue = maxValue
@@ -138,7 +151,7 @@ public struct CircleToggleButtonStyle: ButtonStyle {
             : theme.textColor(for: colorScheme)
         configuration.label
             .circleButtonBody(configuration: configuration,
-                              maxValue: maxValue,
+                              maxValue: maxValue * dynamicTypeSize.lgScaleFactor,
                               foreground: foreground,
                               background: theme.primaryColor(for: colorScheme))
     }
@@ -148,6 +161,7 @@ public struct CircleToggleButtonStyle: ButtonStyle {
 public struct CircleStatusButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.theme) var theme
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
 
     public init(maxValue: CGFloat, status: ThemeStatus) {
         self.maxValue = maxValue
@@ -159,7 +173,7 @@ public struct CircleStatusButtonStyle: ButtonStyle {
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .circleButtonBody(configuration: configuration,
-                              maxValue: maxValue,
+                              maxValue: maxValue * dynamicTypeSize.lgScaleFactor,
                               foreground: theme.statusColor(for: status),
                               background: theme.backgroundStatusColor)
     }
@@ -196,7 +210,14 @@ private extension View {
         self
             .foregroundColor(foreground)
             .lgFont(.body1)
-            .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
+            // `maxWidth`/`maxHeight` only *cap* each axis; each one still resolves from
+            // whatever that axis is independently proposed (by the icon's own content size
+            // and the ambient layout), so nothing guarantees the two end up equal. Depending
+            // on where the button sits (a NavigationStack destination with sibling sections
+            // reproduced it; an isolated HStack didn't), that mismatch clips Circle()/Capsule()
+            // into a flattened pill instead of a circle. An exact width/height always resolves
+            // to precisely maxValue × maxValue, so the shape can't degenerate that way.
+            .frame(width: maxValue, height: maxValue, alignment: .center)
             .background(background.opacity(configuration.isPressed ? 0.7 : 1))
             .clipShape(Circle())
             .overlay(PrimaryGradient())

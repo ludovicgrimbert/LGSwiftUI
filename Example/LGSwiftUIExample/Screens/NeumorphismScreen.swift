@@ -60,8 +60,10 @@ struct NeumorphismScreen: View {
         GridRow {
             Text(name).textStyle(.caption).frame(width: theme.size.l, alignment: .leading)
             ForEach(effects, id: \.0) { _, effect in
+                // Same colour as the screen's own background (Pampuko's mid-tone lavender-grey):
+                // that's what makes both the dark shadow and the light highlight read clearly.
                 NeumorphismView(style: style, effect: effect, width: theme.size.m + theme.size.s, height: theme.size.m + theme.size.s,
-                                color: theme.darkPrimaryBackgroundColor)
+                                color: theme.lightPrimaryBackgroundColor)
             }
         }
     }
