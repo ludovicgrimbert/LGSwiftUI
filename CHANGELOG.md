@@ -4,6 +4,34 @@ All notable changes to this package. The format follows [Keep a Changelog](https
 the package uses [SemVer](https://semver.org) — while on `0.x`, minor versions may break source compatibility
 and are called out below.
 
+## [1.0.0] - 2026-09-12
+
+First stable release. Everything deprecated in 0.3.0 is removed; the remaining API is the one
+documented in the README. Both consuming apps (RemoteTV, Pampuko) already used none of the
+removed symbols.
+
+### Removed
+- Flat numeric tokens `smallValue`…`veryLargeValue`, `smallMargin`…`veryLargeMargin`,
+  `oneHundred`, `twoHundred` → `theme.size` / `theme.spacing` / `theme.radius`.
+- Environment fonts `\.h1`…`\.overline` and the `CaptionFont*Key` types → `TextRole` with
+  `.textStyle(_:)` / `.lgFont(_:)` (`TextRole.fixedFont` for a non-scaling `Font`).
+- The 13 per-role modifiers `H1Style()`…`OverlineStyle()` → `.textStyle(.h1)`….
+- `Text.textStyle<Style: ViewModifier>(_:)` and `View.backgroundStyle<Style: ViewModifier>(_:)`
+  (aliases of `.modifier(_:)`; the latter shadowed SwiftUI's own modifier).
+- `BackgroundPrimaryStyle` / `BackgroundSecondaryStyle` → `.lgBackground(.primary/.secondary)`.
+- `CustomTextFieldStyle` (built on `TextFieldStyle`'s private `_body`) → `.lgTextFieldStyle(...)`.
+- `NeumorphismView.getShape(style:)` → `NeumorphismStyle.shape`.
+- `NeumorphismLevel`, `NeumorphismType`, `NeumorphismView.init(style:level:type:…)` and the
+  `level`/`type` properties → `NeumorphismEffect` (`highShadow` / `highDeep` / `lowShadow`).
+
+### Changed
+- `UserInputField.isDisabled` is a plain `Bool` (was a `Binding<Bool>` the field only read).
+- `RotateButtonView.ImageStyle` cases are named after what they show — `circlePath`,
+  `circlePathFilled`, `clockwise`, `clockwiseRotated`, `merge` — instead of `style1`…`style5`.
+- `RotateButtonView`'s `color` defaults to the theme's text colour for the current colour
+  scheme (was a hardcoded `.blue`); pass a colour to override.
+- `Model/Fonts.swift` is now `Model/TextRole.swift`.
+
 ## [0.4.4] - 2026-09-12
 
 ### Fixed

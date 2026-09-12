@@ -19,13 +19,6 @@ public extension View {
     func lgBackground(_ level: BackgroundLevel = .primary) -> some View {
         modifier(LGBackgroundModifier(level: level))
     }
-
-    /// This is `View.modifier(_:)` under a name SwiftUI already uses
-    /// (`backgroundStyle(_: ShapeStyle)`). Use `.lgBackground(_:)` or `.modifier(_:)`.
-    @available(*, deprecated, message: "Use .lgBackground(.primary) / .lgBackground(.secondary), or .modifier(_:)")
-    func backgroundStyle<Style: ViewModifier>(_ style: Style) -> some View {
-        ModifiedContent(content: self, modifier: style)
-    }
 }
 
 public struct LGBackgroundModifier: ViewModifier {
@@ -49,21 +42,5 @@ public struct LGBackgroundModifier: ViewModifier {
         case (.secondary, .light): theme.lightSecondaryBackgroundColor
         case (.secondary, _): theme.darkSecondaryBackgroundColor
         }
-    }
-}
-
-@available(*, deprecated, message: "Use .lgBackground(.primary)")
-public struct BackgroundPrimaryStyle: ViewModifier {
-    public init() {}
-    public func body(content: Content) -> some View {
-        content.modifier(LGBackgroundModifier(level: .primary))
-    }
-}
-
-@available(*, deprecated, message: "Use .lgBackground(.secondary)")
-public struct BackgroundSecondaryStyle: ViewModifier {
-    public init() {}
-    public func body(content: Content) -> some View {
-        content.modifier(LGBackgroundModifier(level: .secondary))
     }
 }

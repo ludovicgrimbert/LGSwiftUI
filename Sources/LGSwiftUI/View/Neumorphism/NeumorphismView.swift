@@ -8,19 +8,7 @@
 import Foundation
 import SwiftUI
 
-public enum NeumorphismLevel {
-    case high
-    case low
-}
-
-public enum NeumorphismType {
-    case shadow
-    case deep
-}
-
-/// The three neumorphic treatments the library renders. Replaces the
-/// `(NeumorphismLevel, NeumorphismType)` pair, whose fourth combination (`.low`, `.deep`)
-/// had no rendering.
+/// The three neumorphic treatments the library renders.
 public enum NeumorphismEffect: Sendable, Equatable {
     /// Raised element: wide soft shadows (radius 10).
     case highShadow
@@ -28,16 +16,6 @@ public enum NeumorphismEffect: Sendable, Equatable {
     case highDeep
     /// Slightly raised element: tight shadows (radius 3).
     case lowShadow
-
-    /// `nil` for the (`.low`, `.deep`) combination, which has never rendered anything.
-    public init?(level: NeumorphismLevel, type: NeumorphismType) {
-        switch (level, type) {
-        case (.high, .shadow): self = .highShadow
-        case (.high, .deep): self = .highDeep
-        case (.low, .shadow): self = .lowShadow
-        case (.low, .deep): return nil
-        }
-    }
 }
 
 public enum NeumorphismStyle: Sendable, Equatable {
@@ -65,29 +43,12 @@ public enum NeumorphismStyle: Sendable, Equatable {
 public struct NeumorphismView: View {
 
     public var style: NeumorphismStyle
-    public var effect: NeumorphismEffect?
+    public var effect: NeumorphismEffect
     public let width: CGFloat?
     public let height: CGFloat?
     public let color: Color
     public var shadowColorPrimary: Color
     public var shadowColorSecondary: Color
-
-    /// Backwards-compatible convenience: the effect is `.highShadow` for (`.high`, `.shadow`),
-    /// `.highDeep` for (`.high`, `.deep`), `.lowShadow` for (`.low`, `.shadow`).
-    public var level: NeumorphismLevel {
-        switch effect {
-        case .highShadow, .highDeep, nil: .high
-        case .lowShadow: .low
-        }
-    }
-
-    /// See ``level``.
-    public var type: NeumorphismType {
-        switch effect {
-        case .highShadow, .lowShadow, nil: .shadow
-        case .highDeep: .deep
-        }
-    }
 
     public init(style: NeumorphismStyle,
                 effect: NeumorphismEffect,
@@ -98,27 +59,6 @@ public struct NeumorphismView: View {
                 shadowColorSecondary: Color = Color.white) {
         self.style = style
         self.effect = effect
-        self.width = width
-        self.height = height
-        self.color = color
-        self.shadowColorPrimary = shadowColorPrimary
-        self.shadowColorSecondary = shadowColorSecondary
-    }
-
-    /// Original initializer, kept for source compatibility. The (`.low`, `.deep`)
-    /// combination renders nothing, as it always did; prefer
-    /// ``init(style:effect:width:height:color:shadowColorPrimary:shadowColorSecondary:)``
-    /// where that case cannot be expressed.
-    public init(style: NeumorphismStyle,
-                level: NeumorphismLevel,
-                type: NeumorphismType,
-                width: CGFloat,
-                height: CGFloat,
-                color: Color,
-                shadowColorPrimary: Color = Color.black,
-                shadowColorSecondary: Color = Color.white) {
-        self.style = style
-        self.effect = NeumorphismEffect(level: level, type: type)
         self.width = width
         self.height = height
         self.color = color
@@ -148,14 +88,7 @@ public struct NeumorphismView: View {
                            color: color,
                            shadowColorPrimary: shadowColorPrimary,
                            shadowColorSecondary: shadowColorSecondary)
-        case nil:
-            EmptyView()
         }
-    }
-
-    @available(*, deprecated, message: "Use NeumorphismStyle.shape instead")
-    public static func getShape(style: NeumorphismStyle) -> some Shape {
-        style.shape
     }
 }
 
@@ -164,14 +97,14 @@ public struct NeumorphismView: View {
 /// Draws a ``NeumorphismView`` behind the content.
 ///
 /// Without `width`/`height` the shape takes the content's size; with them the content is
-/// framed first, which is pixel-identical to the `ZStack { NeumorphismView(width:height:); content }`
-/// composition the apps have been writing by hand:
+/// framed first. Prefer `.frame(minWidth:minHeight:)` on the content and no explicit size
+/// here when the content is text: identical when it fits, and it can grow.
 ///
 /// ```swift
 /// Text("Back")
-///     .textStyle(H5Style())
-///     .neumorphic(.roundedRectangle(cornerRadius: theme.smallValue), effect: .lowShadow,
-///                 width: theme.largeValue, height: theme.mediumValue)
+///     .textStyle(.h5)
+///     .frame(minWidth: theme.size.l, minHeight: theme.size.m)
+///     .neumorphic(.roundedRectangle(cornerRadius: theme.radius.m), effect: .lowShadow)
 /// ```
 ///
 /// `color` defaults to the theme's primary background for the current colour scheme.

@@ -30,7 +30,8 @@ public struct UserInputField: View {
     public var dynamicTypeSize: ClosedRange<DynamicTypeSize>
     public var isAutocorrectionDisabled: Bool
     @Binding public var text: String
-    @Binding public var isDisabled: Bool
+    /// Plain value: the field only reads it. Pass the state you already have.
+    public var isDisabled: Bool
     @FocusState private var isTextFieldFocused: Bool
 
     // Callback
@@ -49,7 +50,7 @@ public struct UserInputField: View {
         dynamicTypeSize: ClosedRange<DynamicTypeSize> = .small ... .accessibility3 ,
         placeholderLabel: String,
         text: Binding<String>,
-        isDisabled: Binding<Bool> = .constant(false),
+        isDisabled: Bool = false,
         searchButtonTapped: ((String) -> Void)? = nil,
         automaticSearchTrigger: ((String) -> Void)? = nil,
     ) {
@@ -66,7 +67,7 @@ public struct UserInputField: View {
         self.dynamicTypeSize = dynamicTypeSize
         self.placeholderLabel = placeholderLabel
         self._text = text
-        self._isDisabled = isDisabled
+        self.isDisabled = isDisabled
         self.searchButtonTapped = searchButtonTapped
         self.automaticSearchTrigger = automaticSearchTrigger
     }
@@ -83,7 +84,7 @@ public struct UserInputField: View {
         dynamicTypeSize: ClosedRange<DynamicTypeSize> = .small ... .accessibility3 ,
         placeholderLabel: String,
         text: Binding<String>,
-        isDisabled: Binding<Bool> = .constant(false),
+        isDisabled: Bool = false,
         searchButtonTapped: ((String) -> Void)? = nil,
         automaticSearchTrigger: ((String) -> Void)? = nil,
     ) {
@@ -100,7 +101,7 @@ public struct UserInputField: View {
         self.dynamicTypeSize = dynamicTypeSize
         self.placeholderLabel = placeholderLabel
         self._text = text
-        self._isDisabled = isDisabled
+        self.isDisabled = isDisabled
         self.searchButtonTapped = searchButtonTapped
         self.automaticSearchTrigger = automaticSearchTrigger
     }

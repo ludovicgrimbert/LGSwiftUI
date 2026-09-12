@@ -82,12 +82,10 @@ public struct ThemeRadius: Sendable, Equatable {
 /// Colours come in `light*`/`dark*` pairs; every style in the library picks one side
 /// based on the `colorScheme` in the environment. The defaults are the system's
 /// semantic colours, which already adapt to the colour scheme, so a theme that
-/// overrides only its `dark*` side (as apps forcing dark mode do) still renders a
-/// sensible light mode.
+/// overrides only one side still renders a sensible other side.
 ///
 /// Numeric tokens are grouped by what they are for — ``spacing`` (gaps), ``size``
-/// (dimensions) and ``radius`` (corners). The flat `smallValue`/`smallMargin`/… tokens
-/// are deprecated aliases of those groups and will be removed in 1.0.
+/// (dimensions) and ``radius`` (corners).
 public protocol Theme: Sendable {
     //    ************* BACKGROUND STYLE *************
     var lightPrimaryBackgroundColor: Color { get }
@@ -118,30 +116,6 @@ public protocol Theme: Sendable {
     var spacing: ThemeSpacing { get }
     var size: ThemeSize { get }
     var radius: ThemeRadius { get }
-
-    //    ************* LEGACY FLAT TOKENS (deprecated) *************
-    @available(*, deprecated, message: "Use theme.size.s for a dimension, theme.spacing.m for a gap, or theme.radius.m for a corner")
-    var smallValue: CGFloat { get }
-    @available(*, deprecated, message: "Use theme.size.m for a dimension or theme.spacing.xl for a gap")
-    var mediumValue: CGFloat { get }
-    @available(*, deprecated, renamed: "size.l")
-    var largeValue: CGFloat { get }
-    @available(*, deprecated, renamed: "size.xl")
-    var veryLargeValue: CGFloat { get }
-
-    @available(*, deprecated, message: "Use theme.spacing.xs for a gap or theme.radius.s for a corner")
-    var smallMargin: CGFloat { get }
-    @available(*, deprecated, renamed: "spacing.s")
-    var mediumMargin: CGFloat { get }
-    @available(*, deprecated, renamed: "spacing.m")
-    var largeMargin: CGFloat { get }
-    @available(*, deprecated, renamed: "spacing.l")
-    var veryLargeMargin: CGFloat { get }
-
-    @available(*, deprecated, message: "Name a token after its role, not its value; use an explicit layout constant")
-    var oneHundred: CGFloat { get }
-    @available(*, deprecated, message: "Name a token after its role, not its value; use an explicit layout constant")
-    var twoHundred: CGFloat { get }
 }
 
 public extension Theme {
@@ -174,22 +148,6 @@ public extension Theme {
     var spacing: ThemeSpacing { ThemeSpacing() }
     var size: ThemeSize { ThemeSize() }
     var radius: ThemeRadius { ThemeRadius() }
-
-    //    ************* LEGACY FLAT TOKENS *************
-    // Derived from the groups so that an app overriding `size`/`spacing` keeps the old
-    // names consistent while it migrates its call sites.
-    var smallValue: CGFloat { size.s }
-    var mediumValue: CGFloat { size.m }
-    var largeValue: CGFloat { size.l }
-    var veryLargeValue: CGFloat { size.xl }
-
-    var smallMargin: CGFloat { spacing.xs }
-    var mediumMargin: CGFloat { spacing.s }
-    var largeMargin: CGFloat { spacing.m }
-    var veryLargeMargin: CGFloat { spacing.l }
-
-    var oneHundred: CGFloat { 100.0 }
-    var twoHundred: CGFloat { 200.0 }
 }
 
 // MARK: - Environment
