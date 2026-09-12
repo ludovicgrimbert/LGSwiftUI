@@ -32,8 +32,8 @@ public struct NeumorphicButtonStyle: ButtonStyle {
     /// - Parameters:
     ///   - style: shape of the button; defaults to `.roundedRectangle(cornerRadius: theme.radius.m)`.
     ///   - effect: neumorphic treatment; defaults to `.lowShadow`.
-    ///   - width: fixed width; `nil` sizes to the label.
-    ///   - height: fixed height; `nil` defaults to the scaled `theme.size.m`.
+    ///   - width: minimum width; `nil` sizes to the label. The button grows if the label needs more.
+    ///   - height: minimum height; `nil` defaults to the scaled `theme.size.m`.
     ///   - role: label typography; defaults to `.h5`.
     public nonisolated init(style: NeumorphismStyle? = nil,
                             effect: NeumorphismEffect = .lowShadow,
@@ -51,10 +51,10 @@ public struct NeumorphicButtonStyle: ButtonStyle {
         configuration.label
             .foregroundColor(theme.textColor(for: colorScheme))
             .lgFont(role)
-            .neumorphic(style ?? .roundedRectangle(cornerRadius: theme.radius.m),
-                        effect: effect,
-                        width: width,
-                        height: height ?? size.m)
+            // Minimums, not fixed sizes: identical when the label fits (the usual case), and the
+            // shape grows with the label instead of clipping it at larger text sizes.
+            .frame(minWidth: width, minHeight: height ?? size.m)
+            .neumorphic(style ?? .roundedRectangle(cornerRadius: theme.radius.m), effect: effect)
             .opacity(configuration.isPressed ? 0.7 : 1)
     }
 }
