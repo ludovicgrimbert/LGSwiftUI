@@ -210,7 +210,14 @@ private extension View {
         self
             .foregroundColor(foreground)
             .lgFont(.body1)
-            .frame(maxWidth: maxValue, maxHeight: maxValue, alignment: .center)
+            // `maxWidth`/`maxHeight` only *cap* each axis; each one still resolves from
+            // whatever that axis is independently proposed (by the icon's own content size
+            // and the ambient layout), so nothing guarantees the two end up equal. Depending
+            // on where the button sits (a NavigationStack destination with sibling sections
+            // reproduced it; an isolated HStack didn't), that mismatch clips Circle()/Capsule()
+            // into a flattened pill instead of a circle. An exact width/height always resolves
+            // to precisely maxValue × maxValue, so the shape can't degenerate that way.
+            .frame(width: maxValue, height: maxValue, alignment: .center)
             .background(background.opacity(configuration.isPressed ? 0.7 : 1))
             .clipShape(Circle())
             .overlay(PrimaryGradient())

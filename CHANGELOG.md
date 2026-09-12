@@ -7,15 +7,22 @@ and are called out below.
 ## [0.4.2] - 2026-09-12
 
 ### Fixed
-- `CircleButtonStyle`, `CircleToggleButtonStyle` and `CircleStatusButtonStyle` didn't scale
+- `CircleButtonStyle`, `CircleToggleButtonStyle` and `CircleStatusButtonStyle` could render as a
+  flattened pill instead of a circle: their body sized itself with `.frame(maxWidth:maxHeight:)`,
+  which only *caps* each axis rather than forcing a square, so the actually-resolved width and
+  height could differ depending on the surrounding layout (reproduced with all of ButtonsScreen's
+  sections stacked together; an isolated row didn't show it) — screenshotted by Ludovic on the
+  example gallery's round buttons. Now uses an exact `.frame(width:height:)`, which always
+  resolves to precisely that size regardless of context. No change at the default setting on
+  the contexts already covered by the library's own snapshots (only the pixel-identical
+  accessibility3 reference needed re-recording); RemoteTV and Pampuko get the fix once they
+  update, whatever context they use these styles in.
+- `CircleButtonStyle`, `CircleToggleButtonStyle` and `CircleStatusButtonStyle` also didn't scale
   their own diameter with Dynamic Type, even though their label already did (`.lgFont(.body1)`)
   — the file's own doc comment claimed otherwise. At larger accessibility text sizes the icon
   grew while the circle stayed fixed, crowding it (barely any margin left, most visibly top and
-  bottom) — spotted on the example gallery's round buttons. `maxValue` is now multiplied by
-  `dynamicTypeSize.lgScaleFactor`, same curve the label's font already follows, so the
-  icon-to-circle margin stays constant at every text size. No change at the default setting
-  (factor is 1); RemoteTV and Pampuko use these styles but only at the default text size today,
-  so unaffected in practice, and get the fix automatically once they update.
+  bottom). `maxValue` is now multiplied by `dynamicTypeSize.lgScaleFactor`, same curve the
+  label's font already follows, so the icon-to-circle margin stays constant at every text size.
 
 ### Changed
 - `ExampleTheme`'s light side is now Pampuko's actual `MainTheme` palette (mid-tone
