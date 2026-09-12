@@ -7,7 +7,7 @@ Swift 6 language mode, no dependencies.
 ## Installation
 
 ```swift
-.package(url: "https://github.com/ludovicgrimbert/LGSwiftUI", exact: "0.4.3")
+.package(url: "https://github.com/ludovicgrimbert/LGSwiftUI", exact: "0.4.4")
 ```
 
 The package is `0.x`: minor versions may contain breaking changes, so pin an exact
