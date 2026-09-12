@@ -116,6 +116,7 @@ public protocol Theme: Sendable {
     var spacing: ThemeSpacing { get }
     var size: ThemeSize { get }
     var radius: ThemeRadius { get }
+    var layout: ThemeLayout { get }
 }
 
 public extension Theme {
@@ -148,6 +149,7 @@ public extension Theme {
     var spacing: ThemeSpacing { ThemeSpacing() }
     var size: ThemeSize { ThemeSize() }
     var radius: ThemeRadius { ThemeRadius() }
+    var layout: ThemeLayout { ThemeLayout() }
 }
 
 // MARK: - Environment

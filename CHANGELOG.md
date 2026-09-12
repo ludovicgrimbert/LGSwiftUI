@@ -4,6 +4,14 @@ All notable changes to this package. The format follows [Keep a Changelog](https
 the package uses [SemVer](https://semver.org) — while on `0.x`, minor versions may break source compatibility
 and are called out below.
 
+## [1.1.0] - 2026-09-12
+
+### Added
+- `ThemeLayout` (`theme.layout.maxContentWidth`, default 640) and `View.lgContentWidth()`: in a
+  regular horizontal size class (iPad, large iPhones in landscape) the content is capped to that
+  width and centred; compact stays edge to edge. Apply it inside `lgPrimaryBackground()` so the
+  background still fills the screen.
+
 ## [1.0.0] - 2026-09-12
 
 First stable release. Everything deprecated in 0.3.0 is removed; the remaining API is the one

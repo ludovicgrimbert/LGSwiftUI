@@ -58,6 +58,7 @@ extension View {
 | `theme.spacing` | `xs` 8 · `s` 16 · `m` 24 · `l` 32 · `xl` 48 | padding, stack spacing, gaps |
 | `theme.size` | `xxs` 8 · `xs` 16 · `s` 24 · `m` 48 · `l` 80 · `xl` 160 | dots, glyphs, icons, control heights, cards, hero elements |
 | `theme.radius` | `s` 8 · `m` 24 | corner radii |
+| `theme.layout` | `maxContentWidth` 640 | widest the content gets in a regular size class (iPad) — via `.lgContentWidth()` |
 
 For dimensions that wrap text, read `@Environment(\.lgScaledSize)` instead of
 `theme.size`: it is the same table multiplied by the user's Dynamic Type factor
@@ -88,7 +89,7 @@ white. See `Extension/ExtColor.swift`. `Color(hex: 0x1E1E1E)` is also available.
 |---|---|
 | Theme | `Theme`, `ThemeSpacing`, `ThemeSize`, `ThemeRadius`, `View.lgTheme(_:colorScheme:)`, `\.lgScaledSize` |
 | Typography | `TextRole`, `View.textStyle(_:)`, `View.lgFont(_:)` |
-| Backgrounds | `View.lgBackground(.primary/.secondary)`, `View.lgPrimaryBackground()` (fills the screen) |
+| Backgrounds & layout | `View.lgBackground(.primary/.secondary)`, `View.lgPrimaryBackground()` (fills the screen), `View.lgContentWidth()` (iPad content cap) |
 | Buttons | `SimpleButtonStyle`, `ClearButtonStyle`, `PrimaryButtonStyle`, `RectangleButtonStyle`, `CircleButtonStyle`, `CircleToggleButtonStyle`, `CircleStatusButtonStyle`, `NeumorphicButtonStyle` |
 | Neumorphism | `View.neumorphic(_:effect:…)`, `NeumorphismView`, `NeumorphismStyle`, `NeumorphismEffect`, `Triangle` |
 | Text fields | `View.lgTextFieldStyle(color:font:cornerRadius:strokeColor:lineWidth:)` |
