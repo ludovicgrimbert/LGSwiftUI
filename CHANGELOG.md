@@ -4,6 +4,10 @@ All notable changes to this package. The format follows [Keep a Changelog](https
 the package uses [SemVer](https://semver.org) — while on `0.x`, minor versions may break source compatibility
 and are called out below.
 
+## [0.4.3] - 2026-09-12
+
+Release tag on main after merging the 0.4.1 / 0.4.2 fixes. Same content as 0.4.2.
+
 ## [0.4.2] - 2026-09-12
 
 ### Fixed
