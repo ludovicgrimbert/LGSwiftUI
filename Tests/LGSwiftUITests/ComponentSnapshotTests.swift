@@ -212,6 +212,22 @@ struct ComponentSnapshotTests {
         assertSnapshot(of: view, named: "Backgrounds-\(Self.suffix(scheme))", size: CGSize(width: 240, height: 80))
     }
 
+    @Test("Content width caps and centres in a regular size class only")
+    func contentWidth() {
+        func screen() -> some View {
+            Text("Content").textStyle(.h5)
+                .frame(maxWidth: .infinity, minHeight: 80)
+                .lgBackground(.secondary)
+                .lgContentWidth()
+                .lgPrimaryBackground()
+                .lgTheme(SnapshotTheme(), colorScheme: .dark)
+        }
+        assertSnapshot(of: screen().environment(\.horizontalSizeClass, .regular),
+                       named: "ContentWidth-regular", size: CGSize(width: 900, height: 120))
+        assertSnapshot(of: screen().environment(\.horizontalSizeClass, .compact),
+                       named: "ContentWidth-compact", size: CGSize(width: 900, height: 120))
+    }
+
     @Test("Scrollable container", arguments: schemes)
     func scrollableContainer(scheme: ColorScheme) {
         let view = ScrollableContainerView { _ in
