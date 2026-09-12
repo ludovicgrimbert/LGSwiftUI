@@ -34,7 +34,7 @@ struct ComponentsScreen: View {
 
             DemoSection(title: "RotateButtonView & LoaderView") {
                 HStack(spacing: theme.spacing.m) {
-                    RotateButtonView(imageStyle: .style4, color: theme.lightTextColor,
+                    RotateButtonView(imageStyle: .clockwiseRotated, color: theme.lightTextColor,
                                      width: theme.size.m, height: theme.size.m, duration: 1) {
                         isLoading = true
                         Task { try? await Task.sleep(for: .seconds(1)); isLoading = false }

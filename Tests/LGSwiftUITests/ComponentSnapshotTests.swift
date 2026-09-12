@@ -180,8 +180,8 @@ struct ComponentSnapshotTests {
     @Test("Rotate button", arguments: schemes)
     func rotateButton(scheme: ColorScheme) {
         let view = HStack(spacing: 24) {
-            RotateButtonView(imageStyle: .style1, color: .orange, width: 48, height: 48)
-            RotateButtonView(imageStyle: .style3, color: .orange, width: 48, height: 48, ratio: 2)
+            RotateButtonView(imageStyle: .circlePath, color: .orange, width: 48, height: 48)
+            RotateButtonView(imageStyle: .clockwise, color: .orange, width: 48, height: 48, ratio: 2)
         }
         .snapshotEnvironment(scheme)
 

@@ -33,23 +33,6 @@ struct ThemeTokenTests {
         #expect(theme.radius == ThemeRadius(s: 8, m: 24))
     }
 
-    @available(*, deprecated) // exercises the deprecated flat tokens on purpose
-    @Test("Legacy flat tokens are derived from the groups")
-    func legacyTokensFollowGroups() {
-        struct WideTheme: Theme { var size = ThemeSize(l: 120); var spacing = ThemeSpacing(xs: 10) }
-        let theme = WideTheme()
-        #expect(theme.smallValue == 24)
-        #expect(theme.mediumValue == 48)
-        #expect(theme.largeValue == 120)
-        #expect(theme.veryLargeValue == 160)
-        #expect(theme.smallMargin == 10)
-        #expect(theme.mediumMargin == 16)
-        #expect(theme.largeMargin == 24)
-        #expect(theme.veryLargeMargin == 32)
-        #expect(theme.oneHundred == 100)
-        #expect(theme.twoHundred == 200)
-    }
-
     @Test("A theme can override a single group")
     func singleOverride() {
         struct WideTheme: Theme { var size = ThemeSize(l: 120) }

@@ -7,11 +7,10 @@ Swift 6 language mode, no dependencies.
 ## Installation
 
 ```swift
-.package(url: "https://github.com/ludovicgrimbert/LGSwiftUI", exact: "0.4.4")
+.package(url: "https://github.com/ludovicgrimbert/LGSwiftUI", exact: "1.0.0")
 ```
 
-The package is `0.x`: minor versions may contain breaking changes, so pin an exact
-version (or `upToNextMinor`) rather than `upToNextMajor`.
+Stable since 1.0.0: `from: "1.0.0"` is safe.
 
 ## Theme
 
@@ -108,12 +107,12 @@ Button("Delete", action: delete)
     .buttonStyle(NeumorphicButtonStyle(width: 240))
 ```
 
-## Migrating from 0.2.x
+## Migrating from 0.x
 
-Everything from 0.2.x still compiles (except the library's own `AnyShape`, which SwiftUI
-provides); deprecated symbols point to their replacement:
+Everything deprecated in 0.3 was removed in 1.0.0 — see the CHANGELOG for the full list. The
+short version:
 
-| 0.2.x | 0.3.0 |
+| 0.x | 1.0 |
 |---|---|
 | `theme.smallValue` (as a size) / (as a gap) / (as a radius) | `theme.size.s` / `theme.spacing.m` / `theme.radius.m` |
 | `theme.mediumValue`, `largeValue`, `veryLargeValue` | `theme.size.m`, `.l`, `.xl` |
@@ -121,9 +120,10 @@ provides); deprecated symbols point to their replacement:
 | `Text(…).textStyle(H5Style())` | `Text(…).textStyle(.h5)` |
 | `@Environment(\.caption) var caption` + `.font(caption)` | `.lgFont(.caption)` |
 | `.backgroundStyle(BackgroundPrimaryStyle())` | `.lgBackground(.primary)` |
-| `ZStack { NeumorphismView(…, width:, height:); content }` | `content.neumorphic(…, width:, height:)` |
+| `ZStack { NeumorphismView(…, level: .low, type: .shadow, width:, height:); content }` | `content.frame(minWidth:minHeight:).neumorphic(…, effect: .lowShadow)` |
 | `.textFieldStyle(CustomTextFieldStyle(…))` | `.lgTextFieldStyle(…)` |
 | `.environment(\.theme, t).environment(\.colorScheme, .dark)` | `.lgTheme(t, colorScheme: .dark)` |
+| `RotateButtonView(imageStyle: .style4, color: .blue, …)` | `RotateButtonView(imageStyle: .clockwiseRotated, …)` (colour defaults to the theme) |
 
 ## Example app
 
