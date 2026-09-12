@@ -4,6 +4,16 @@ All notable changes to this package. The format follows [Keep a Changelog](https
 the package uses [SemVer](https://semver.org) — while on `0.x`, minor versions may break source compatibility
 and are called out below.
 
+## [0.4.1] - 2026-09-12
+
+### Fixed
+- `PrimaryButtonStyle`'s border rendered as 4 disconnected segments (2 short horizontal ones
+  poking past the capsule's silhouette, 2 barely-visible vertical slivers) instead of
+  following the capsule outline — spotted in the example gallery. `.border(_:width:)` stroked
+  a plain rectangle *before* `.clipShape(RoundedRectangle)` cut it down to a capsule, chopping
+  the rectangle's corners instead of the stroke following the curve. Now clips and strokes the
+  same shape. Neither RemoteTV nor Pampuko use this style, so they are unaffected.
+
 ## [0.4.0] - 2026-09-11
 
 ### Added

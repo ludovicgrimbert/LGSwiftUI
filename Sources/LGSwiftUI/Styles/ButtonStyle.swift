@@ -68,13 +68,20 @@ public struct PrimaryButtonStyle: ButtonStyle {
     var maxValue: CGFloat
 
     public func makeBody(configuration: Configuration) -> some View {
-        configuration.label
+        // `.border(_:width:)` strokes a plain rectangle, drawn *before* the
+        // `.clipShape(RoundedRectangle)` below cuts the view down to a capsule — so the
+        // rectangle's corners get chopped off instead of the stroke following the capsule,
+        // leaving 4 disconnected border segments (2 short horizontal ones poking past the
+        // capsule's silhouette, 2 barely-visible vertical slivers). Stroking the same shape
+        // used to clip fixes it: the border then follows the capsule exactly.
+        let shape = RoundedRectangle(cornerRadius: size.m / 2)
+        return configuration.label
             .foregroundColor(theme.textColor(for: colorScheme))
             .lgFont(.body1)
             .frame(maxWidth: maxValue, maxHeight: size.m, alignment: .center)
-            .border(theme.textColor(for: colorScheme), width: 0.5)
             .background(theme.primaryColor(for: colorScheme).opacity(configuration.isPressed ? 0.7 : 1))
-            .clipShape(RoundedRectangle(cornerRadius: size.m / 2))
+            .clipShape(shape)
+            .overlay(shape.stroke(theme.textColor(for: colorScheme), lineWidth: 0.5))
             .scaleEffect(configuration.isPressed ? 1.1 : 1.0)
     }
 }
